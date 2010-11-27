@@ -1,4 +1,3 @@
-OPENCLPATH	:= /home/kondr/.NVIDIA_GPU_Computing_SDK/OpenCL
 EXECUTABLE	:= test-c2hs
 HSMAIN		:= main.hs
 
@@ -7,14 +6,18 @@ CC		:= gcc
 GHC		:= ghc
 
 C2HSPATH	:= ../../Foreign/OpenCL/Raw
-C2HSFILES	:= $(C2HSPATH)/Internal/Types.chs $(C2HSPATH)/V10/Device.chs $(C2HSPATH)/V10/Platform.chs $(C2HSPATH)/Error.chs
+C2HSFILES	:= $(C2HSPATH)/Error.chs $(C2HSPATH)/Internal/Types.chs $(C2HSPATH)/V10/Device.chs $(C2HSPATH)/V10/Platform.chs
 
-INCLUDES	+= -I./ -I$(OPENCLPATH)/common/inc
+GHCFLAGS	:= -XDeriveDataTypeable -XScopedTypeVariables -XEmptyDataDecls -XFlexibleInstances -XTypeSynonymInstances -XOverloadedStrings
 
-LIBPATH		:= -L./ -L/usr/lib -L$(OPENCLPATH)/common/lib
+INCLUDES	+= -I./ -I/home/kondr/.NVIDIA_GPU_Computing_SDK/OpenCL/common/inc
 
-$(EXECUTABLE) : $(C2HSFILES:.chs=.hs) $(HSMAIN) $(C2HSPATH)/Internal/C2HS.hs
-	$(GHC) -o $@ $^ $(INCLUDES) $(LIBPATH)
+LIBPATH		:= -L./ -L/usr/lib -L/home/kondr/.NVIDIA_GPU_Computing_SDK/OpenCL/common/lib
+
+LIB		:= -lOpenCL
+
+$(EXECUTABLE) : $(C2HSPATH)/Internal/C2HS.hs $(C2HSFILES:.chs=.hs) $(HSMAIN)
+	$(GHC) $(GHCFLAGS) -o $@ $^ $(INCLUDES) $(LIBPATH) $(LIB) /home/kondr/Programs/GHC/lib/ghc-6.12.3/bytestring-0.9.1.7/HSbytestring-0.9.1.7.o
 
 %.hs : %.chs
 	$(C2HS) $<
@@ -25,3 +28,5 @@ clean :
 	rm -f $(EXECUTABLE)
 	rm -f $(C2HSFILES:.chs=.hs)
 	rm -f $(C2HSFILES:.chs=.chs.*)
+	rm -f $(C2HSPATH)/Internal/C2HS.hi
+	rm -f $(C2HSPATH)/Internal/C2HS.o

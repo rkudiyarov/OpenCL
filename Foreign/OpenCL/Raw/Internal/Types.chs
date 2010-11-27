@@ -1,3 +1,4 @@
+{-# LANGUAGE ForeignFunctionInterface, ExistentialQuantification #-}
 module Foreign.OpenCL.Raw.Internal.Types where
 
 #include <CL/opencl.h>
