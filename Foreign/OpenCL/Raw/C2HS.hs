@@ -34,7 +34,7 @@
 --  with the C->HS-specific higher-level marshalling routines.
 --
 
-module Foreign.OpenCL.Raw.Internal.C2HS (
+module Foreign.OpenCL.Raw.C2HS (
 
   -- * Re-export the language-independent component of the FFI 
   module Foreign,

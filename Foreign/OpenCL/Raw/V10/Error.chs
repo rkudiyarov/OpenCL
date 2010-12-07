@@ -1,8 +1,8 @@
-module Foreign.OpenCL.Raw.Error(CLError(..),
+module Foreign.OpenCL.Raw.V10.Error(CLError(..),
                checkSuccess,
                checkSuccessPtr)  where
 
-#include <CL/opencl.h>
+#include "../inc_opencl.h"
 
 import Data.Typeable
 import Control.Exception

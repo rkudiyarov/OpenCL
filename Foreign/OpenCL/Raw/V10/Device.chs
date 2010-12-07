@@ -1,16 +1,16 @@
 {-# LANGUAGE ForeignFunctionInterface #-}
 
-module Foreign.OpenCL.Raw.V10.Device
-       ( getDeviceIDs
+module Foreign.OpenCL.Raw.V10.Device where
+{-       ( getDeviceIDs
        , getDeviceInfo
        )
        where
 
-#include <CL/opencl.h>
+#include "../inc_opencl.h"
 
-import Foreign.OpenCL.Raw.Internal.C2HS
-import Foreign.OpenCL.Raw.Internal.Types
-import Foreign.OpenCL.Raw.Error
+import Foreign.OpenCL.Raw.C2HS
+import Foreign.OpenCL.Raw.V10.Types
+import Foreign.OpenCL.Raw.V10.Error
 
 #c
 enum CLDeviceType {
@@ -49,6 +49,7 @@ cl_uint *num_devices
  , `Int'
  , `Int'
  , castPtr `Ptr a'
- , alloca- `Int' peekIntConv*
+p , alloca- `Int' peekIntConv*
  } -> `Int' checkSuccess*-
 #}
+-}
