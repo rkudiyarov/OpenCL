@@ -1,8 +1,10 @@
 {-# LANGUAGE ForeignFunctionInterface #-}
 
-module Foreign.OpenCL.Raw.V10.Device where
-{-       ( getDeviceIDs
-       , getDeviceInfo
+module Foreign.OpenCL.Raw.V10.Device
+       ( clGetDeviceIDs
+       , clGetDeviceInfo
+       , CLDeviceType(..)
+       , CLDeviceInfo(..)
        )
        where
 
@@ -14,42 +16,42 @@ import Foreign.OpenCL.Raw.V10.Error
 
 #c
 enum CLDeviceType {
-    DeviceTypeCPU = CL_DEVICE_TYPE_CPU,
-    DeviceTypeGPU = CL_DEVICE_TYPE_GPU,
-    DeviceTypeAccelerator = CL_DEVICE_TYPE_ACCELERATOR,
-    DeviceTypeDefault = CL_DEVICE_TYPE_DEFAULT,
+    CLDeviceTypeCPU = CL_DEVICE_TYPE_CPU,
+    CLDeviceTypeGPU = CL_DEVICE_TYPE_GPU,
+    CLDeviceTypeAccelerator = CL_DEVICE_TYPE_ACCELERATOR,
+    CLDeviceTypeDefault = CL_DEVICE_TYPE_DEFAULT,
+    CLDeviceTypeAll = CL_DEVICE_TYPE_ALL,
 };
 #endc
-{#enum CLDeviceType as DeviceType {} deriving (Eq,Show,Read)#}
 
-deviceTypeAll :: [DeviceType]
-deviceTypeAll = [DeviceTypeCPU, DeviceTypeGPU, DeviceTypeAccelerator, DeviceTypeDefault]
+{#enum CLDeviceType {} deriving (Eq, Show) #}
 
-{#fun unsafe clGetDeviceIDs as getDeviceIDs
-  { id `Ptr ()' -- to be ignored
-  , combineBitMasks `[DeviceType]'
+clDeviceType = cIntConv . fromEnum
+
+{#fun unsafe clGetDeviceIDs as ^
+  { castPtr `CLPlatformID'
+  , clDeviceType `CLDeviceType'
   , `Int'
-  , castPtr `Ptr (Ptr _CLDeviceID)'
+  , castPtr `Ptr CLDeviceID'
   , alloca- `Int' peekIntConv*
   } -> `Int' checkSuccess*-
 #}
 
-{-|
-(
-cl_platform_id platform,
-cl_device_type device_type,
-cl_uint num_entries,
-cl_device_id *devices,
-cl_uint *num_devices
-)
--}
+#c
+enum CLDeviceInfo {
+    CLDeviceType = CL_DEVICE_TYPE,
+};
+#endc
 
-{#fun unsafe clGetDeviceInfo as getDeviceInfo
- { deviceIDPtr `DeviceID'
- , `Int'
+{#enum CLDeviceInfo {} deriving (Eq, Show) #}
+
+clDeviceInfo = cFromEnum
+
+{#fun unsafe clGetDeviceInfo as ^
+ { castPtr `CLDeviceID'
+ , clDeviceInfo `CLDeviceInfo'
  , `Int'
  , castPtr `Ptr a'
-p , alloca- `Int' peekIntConv*
+ , alloca- `Int' peekIntConv*
  } -> `Int' checkSuccess*-
 #}
--}
