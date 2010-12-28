@@ -1,3 +1,5 @@
+TARGET		= $(shell uname)
+
 EXECUTABLE	:= test-c2hs
 HSMAIN		:= main.hs
 
@@ -9,7 +11,11 @@ C2HSFILES	:= $(C2HSPATH)/V10/Error.chs $(C2HSPATH)/V10/Types.chs $(C2HSPATH)/V10
 
 GHCFLAGS	:= -XDeriveDataTypeable
 
+ifeq ($(TARGET),Darwin)
+LIB		:= -framework OpenCL
+else
 LIB		:= -lOpenCL
+endif
 
 $(EXECUTABLE) : $(C2HSPATH)/C2HS.hs $(C2HSFILES:.chs=.hs) $(HSMAIN)
 	$(GHC) $(GHCFLAGS) -o $@ $^ $(LIB)
