@@ -1,10 +1,17 @@
+--------------------------------------------------------------------------------
+-- |
+-- Copyright : (c) [2010..2011] Vadim Zakondyrin
+-- License   : BSD
+-- |
+--------------------------------------------------------------------------------
+
 {-# LANGUAGE ForeignFunctionInterface #-}
 
 module Foreign.OpenCL.Raw.V10.Device
-       ( clGetDeviceIDs
+       ( CLDDeviceType(..)
+       , CLDDeviceInfo(..)
+       , clGetDeviceIDs
        , clGetDeviceInfo
-       , CLDeviceType(..)
-       , CLDeviceInfo(..)
        )
        where
 
@@ -12,46 +19,45 @@ module Foreign.OpenCL.Raw.V10.Device
 
 import Foreign.OpenCL.Raw.C2HS
 import Foreign.OpenCL.Raw.V10.Types
-import Foreign.OpenCL.Raw.V10.Error
 
 #c
-enum CLDeviceType {
-    CLDeviceTypeCPU = CL_DEVICE_TYPE_CPU,
-    CLDeviceTypeGPU = CL_DEVICE_TYPE_GPU,
+enum CLDDeviceType {
+    CLDeviceTypeCPU         = CL_DEVICE_TYPE_CPU,
+    CLDeviceTypeGPU         = CL_DEVICE_TYPE_GPU,
     CLDeviceTypeAccelerator = CL_DEVICE_TYPE_ACCELERATOR,
-    CLDeviceTypeDefault = CL_DEVICE_TYPE_DEFAULT,
-    CLDeviceTypeAll = CL_DEVICE_TYPE_ALL,
+    CLDeviceTypeDefault     = CL_DEVICE_TYPE_DEFAULT,
+    CLDeviceTypeAll         = CL_DEVICE_TYPE_ALL,
 };
 #endc
 
-{#enum CLDeviceType {} deriving (Eq, Show) #}
+{#enum CLDDeviceType {} deriving (Eq, Show) #}
 
-clDeviceType = cIntConv . fromEnum
-
-{#fun unsafe clGetDeviceIDs as ^
-  { castPtr `CLPlatformID'
-  , clDeviceType `CLDeviceType'
-  , `Int'
-  , castPtr `Ptr CLDeviceID'
-  , alloca- `Int' peekIntConv*
-  } -> `Int' checkSuccess*-
-#}
+clDeviceType a = fromEnum a
 
 #c
-enum CLDeviceInfo {
+enum CLDDeviceInfo {
     CLDeviceType = CL_DEVICE_TYPE,
 };
 #endc
 
-{#enum CLDeviceInfo {} deriving (Eq, Show) #}
+{#enum CLDDeviceInfo {} deriving (Eq, Show) #}
 
-clDeviceInfo = cFromEnum
+clDeviceInfo a = fromEnum a
+
+{#fun unsafe clGetDeviceIDs as ^
+  { cl_platform_id `CLPlatformID'
+  , cl_device_type `CLDeviceType'
+  , cl_uint        `CLuint'
+  , castPtr        `Ptr CLDeviceID'
+  , castPtr        `Ptr CLuint'
+  } -> `CLint' cl_int
+#}
 
 {#fun unsafe clGetDeviceInfo as ^
- { castPtr `CLDeviceID'
- , clDeviceInfo `CLDeviceInfo'
- , `Int'
- , castPtr `Ptr a'
- , alloca- `Int' peekIntConv*
- } -> `Int' checkSuccess*-
+ { cl_device_id   `CLDeviceID'
+ , cl_device_info `CLDeviceInfo'
+ , size_t         `CLsize'
+ , castPtr        `Ptr a'
+ , castPtr        `Ptr CLsize'
+ } -> `CLint' cl_int
 #}

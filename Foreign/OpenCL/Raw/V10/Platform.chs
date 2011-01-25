@@ -1,9 +1,17 @@
+--------------------------------------------------------------------------------
+-- |
+-- Copyright : (c) [2010..2011] Vadim Zakondyrin
+-- License   : BSD
+-- |
+--------------------------------------------------------------------------------
+
 {-# LANGUAGE ForeignFunctionInterface #-}
 
 module Foreign.OpenCL.Raw.V10.Platform
-       ( clGetPlatformIDs
+       ( CLDPlatformInfo(..)
+       , clPlatformInfo
+       , clGetPlatformIDs
        , clGetPlatformInfo
-       , CLPlatformInfo(..)
        )
        where
 
@@ -11,34 +19,33 @@ module Foreign.OpenCL.Raw.V10.Platform
 
 import Foreign.OpenCL.Raw.C2HS
 import Foreign.OpenCL.Raw.V10.Types
-import Foreign.OpenCL.Raw.V10.Error
-
-{#fun unsafe clGetPlatformIDs as ^
-  { `Int'
-  , castPtr `Ptr CLPlatformID'
-  , alloca- `Int' peekIntConv*
-  } -> `Int' checkSuccess*-
-#}
 
 #c
-enum CLPlatformInfo {
-    CLPlatformProfile = CL_PLATFORM_PROFILE,
-    CLPlatformVersion = CL_PLATFORM_VERSION,
-    CLPlatformName = CL_PLATFORM_NAME,
-    CLPlatformVendor = CL_PLATFORM_VENDOR,
+enum CLDPlatformInfo {
+    CLPlatformProfile    = CL_PLATFORM_PROFILE,
+    CLPlatformVersion    = CL_PLATFORM_VERSION,
+    CLPlatformName       = CL_PLATFORM_NAME,
+    CLPlatformVendor     = CL_PLATFORM_VENDOR,
     CLPlatformExtensions = CL_PLATFORM_EXTENSIONS,
 };
 #endc
 
-{#enum CLPlatformInfo {} deriving (Eq, Show) #}
+{#enum CLDPlatformInfo {} deriving (Eq, Show) #}
 
-fromEnumToInt = cIntConv . fromEnum
+clPlatformInfo a = fromEnum a
+
+{#fun unsafe clGetPlatformIDs as ^
+  { cl_uint `CLuint'
+  , castPtr `Ptr CLPlatformID'
+  , castPtr `Ptr CLuint'
+  } -> `CLint' cl_int
+#}
 
 {#fun unsafe clGetPlatformInfo as ^
-  { castPtr `CLPlatformID'
-  , fromEnumToInt `CLPlatformInfo'
-  , `Int'
-  , castPtr `Ptr a'
-  , alloca- `Int' peekIntConv*
-  } -> `Int' checkSuccess*-
+  { cl_platform_id   `CLPlatformID'
+  , cl_platform_info `CLPlatformInfo'
+  , size_t           `CLsize'
+  , castPtr          `Ptr a'
+  , castPtr          `Ptr CLsize'
+  } -> `CLint' cl_int
 #}
