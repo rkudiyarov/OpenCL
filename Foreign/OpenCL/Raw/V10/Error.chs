@@ -1,17 +1,22 @@
-module Foreign.OpenCL.Raw.V10.Error(CLError(..),
-               checkSuccess,
-               checkSuccessPtr)  where
+--------------------------------------------------------------------------------
+-- |
+-- Copyright : (c) [2011] Vadim Zakondyrin
+-- License   : BSD
+-- |
+--------------------------------------------------------------------------------
+
+{-# LANGUAGE ForeignFunctionInterface #-}
+
+module Foreign.OpenCL.Raw.V10.Error where
 
 #include "../inc_opencl.h"
 
-import Data.Typeable
-import Control.Exception
-
-import Foreign.C
 import Foreign
+import Foreign.C
+import Foreign.OpenCL.Raw.C2HS
 
 #c
-enum CLError {
+enum CLDError {
     CLSuccess = CL_SUCCESS,
     CLDeviceNotFound = CL_DEVICE_NOT_FOUND,
     CLDeviceNotAvailable = CL_DEVICE_NOT_AVAILABLE,
@@ -58,21 +63,5 @@ enum CLError {
     CLInvalidGlObject = CL_INVALID_GL_OBJECT,
     CLInvalidBufferSize = CL_INVALID_BUFFER_SIZE,
     CLInvalidMipLevel = CL_INVALID_MIP_LEVEL,
-
 };
 #endc
-{#enum CLError {} deriving (Show,Typeable)#}
-instance Exception CLError where
-
--- TODO: CLSuccess shouldn't really be an error...
--- TODO: better error message if unknown error
--- TODO: add String argument like Foreign.C.Error funcs
---       so we have better messages.
-checkSuccess :: CInt -> IO ()
-checkSuccess n
-    | n' == fromEnum CLSuccess = return ()
-    | otherwise = throw (toEnum n' :: CLError)
-  where n' = fromEnum n
-
-checkSuccessPtr :: Ptr CInt -> IO ()
-checkSuccessPtr p = peek p >>= checkSuccess
