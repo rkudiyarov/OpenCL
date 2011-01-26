@@ -1,3 +1,5 @@
+TARGET		= $(shell uname)
+
 EXECUTABLE	:= test-c2hs
 HSMAIN		:= main.hs
 
@@ -7,7 +9,11 @@ GHC		:= ghc
 C2HSPATH	:= ../../Foreign/OpenCL/Raw
 C2HSFILES	:= $(C2HSPATH)/V10/Types.chs $(C2HSPATH)/V10/Platform.chs $(C2HSPATH)/V10/Device.chs
 
+ifeq ($(TARGET),Darwin)
+LIB		:= -framework OpenCL
+else
 LIB		:= -lOpenCL
+endif
 
 $(EXECUTABLE) : $(C2HSPATH)/C2HS.hs $(C2HSFILES:.chs=.hs) $(HSMAIN)
 	$(GHC) -o $@ $^ $(LIB)
