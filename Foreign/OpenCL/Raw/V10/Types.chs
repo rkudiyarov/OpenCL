@@ -46,15 +46,53 @@ cl_bool a       = cl_uint a
 type CLbitfield = {# type cl_bitfield #}
 cl_bitfield a   = cl_ulong a
 
-type CLPlatformID   = {# type cl_platform_id #}
+type CLPlatformId   = {# type cl_platform_id #}
 cl_platform_id a    = castPtr a
 type CLPlatformInfo = {# type cl_platform_info #}
 cl_platform_info a  = cl_uint a
 
-type CLDeviceID   = {# type cl_device_id #}
+#c
+enum CLDPlatformInfo {
+    CLPlatformProfile    = CL_PLATFORM_PROFILE,
+    CLPlatformVersion    = CL_PLATFORM_VERSION,
+    CLPlatformName       = CL_PLATFORM_NAME,
+    CLPlatformVendor     = CL_PLATFORM_VENDOR,
+    CLPlatformExtensions = CL_PLATFORM_EXTENSIONS,
+};
+#endc
+
+{#enum CLDPlatformInfo {} deriving (Eq, Show) #}
+
+clPlatformInfo a = cFromEnum a
+
+type CLDeviceId   = {# type cl_device_id #}
 cl_device_id a    = castPtr a
 type CLDeviceType = {# type cl_device_type #}
 cl_device_type a  = cl_bitfield a
 type CLDeviceInfo = {# type cl_device_info #}
 cl_device_info a  = cl_uint a
 
+#c
+enum CLDDeviceType {
+    CLDeviceTypeCPU         = CL_DEVICE_TYPE_CPU,
+    CLDeviceTypeGPU         = CL_DEVICE_TYPE_GPU,
+    CLDeviceTypeAccelerator = CL_DEVICE_TYPE_ACCELERATOR,
+    CLDeviceTypeDefault     = CL_DEVICE_TYPE_DEFAULT,
+    CLDeviceTypeAll         = CL_DEVICE_TYPE_ALL,
+};
+#endc
+
+{#enum CLDDeviceType {} deriving (Eq, Show) #}
+
+clDeviceType a = cFromEnum a
+
+#c
+enum CLDDeviceInfo {
+    CLDeviceType            = CL_DEVICE_TYPE,
+    CLDeviceVendorId        = CL_DEVICE_VENDOR_ID
+};
+#endc
+
+{#enum CLDDeviceInfo {} deriving (Eq, Show) #}
+
+clDeviceInfo a = cFromEnum a
