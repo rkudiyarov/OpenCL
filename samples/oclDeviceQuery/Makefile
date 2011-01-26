@@ -5,14 +5,12 @@ C2HS		:= c2hs
 GHC		:= ghc
 
 C2HSPATH	:= ../../Foreign/OpenCL/Raw
-C2HSFILES	:= $(C2HSPATH)/V10/Error.chs $(C2HSPATH)/V10/Types.chs $(C2HSPATH)/V10/Device.chs $(C2HSPATH)/V10/Platform.chs
-
-GHCFLAGS	:= -XDeriveDataTypeable
+C2HSFILES	:= $(C2HSPATH)/V10/Types.chs $(C2HSPATH)/V10/Platform.chs $(C2HSPATH)/V10/Device.chs
 
 LIB		:= -lOpenCL
 
 $(EXECUTABLE) : $(C2HSPATH)/C2HS.hs $(C2HSFILES:.chs=.hs) $(HSMAIN)
-	$(GHC) $(GHCFLAGS) -o $@ $^ $(LIB)
+	$(GHC) -o $@ $^ $(LIB)
 
 %.hs : %.chs
 	$(C2HS) $<
