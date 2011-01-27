@@ -4,9 +4,7 @@ import Foreign.Ptr
 import Foreign.C
 import Foreign.Storable
 import Foreign.Marshal
-import Foreign.OpenCL.Raw.V10.Types
-import Foreign.OpenCL.Raw.V10.Platform
-import Foreign.OpenCL.Raw.V10.Device
+import Foreign.OpenCL.Raw.V10
 import Foreign.OpenCL.Raw.C2HS
 
 main = alloca $ \p_num_platforms ->
