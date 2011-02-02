@@ -1,10 +1,15 @@
 Name:                   OpenCL
 Version:                0.0.1
-Cabal-version:          >=1.2
-Build-type:             Simple
+Cabal-version:          >= 1.2
 License:                BSD3
 License-file:           LICENSE
 Tested-with:            GHC >= 6.12.3
+
+Build-type:             Custom
+Extra-tmp-files:        config.status
+                        config.log
+Extra-source-files:     configure
+                        configure.ac
 
 Library
   Exposed-Modules:      Foreign.OpenCL.Raw.V10
@@ -12,10 +17,10 @@ Library
                         Foreign.OpenCL.Raw.V10.Error
                         Foreign.OpenCL.Raw.V10.Platform
                         Foreign.OpenCL.Raw.V10.Device
+                        Foreign.OpenCL.Raw.C2HS
   Build-tools:          c2hs >= 0.16.2
   Build-depends:        base >=4,
                         haskell98
-  Other-modules:        Foreign.OpenCL.Raw.C2HS
   Includes:             Foreign/OpenCL/Raw/inc_opencl.h
   Install-includes:     Foreign/OpenCL/Raw/inc_opencl.h
   Include-dirs:         Foreign/OpenCL/Raw/V10
