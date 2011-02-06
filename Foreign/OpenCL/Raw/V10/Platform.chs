@@ -7,7 +7,11 @@
 
 {-# LANGUAGE ForeignFunctionInterface #-}
 
-module Foreign.OpenCL.Raw.V10.Platform where
+module Foreign.OpenCL.Raw.V10.Platform
+       ( clGetPlatformIDs
+       , clGetPlatformInfo
+       )
+       where
 
 #include "../inc_opencl.h"
 

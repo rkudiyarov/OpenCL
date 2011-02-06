@@ -7,7 +7,11 @@
 
 {-# LANGUAGE ForeignFunctionInterface #-}
 
-module Foreign.OpenCL.Raw.V10.Device where
+module Foreign.OpenCL.Raw.V10.Device
+       ( clGetDeviceIDs
+       , clGetDeviceInfo
+       )
+       where
 
 #include "../inc_opencl.h"
 
