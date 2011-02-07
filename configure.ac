@@ -1,4 +1,4 @@
-AC_INIT([OpenCL], [0.0.1])
+AC_INIT([OpenCL], [0.0.2])
 AC_CONFIG_SRCDIR([OpenCL.cabal])
 AC_PROG_CC
 

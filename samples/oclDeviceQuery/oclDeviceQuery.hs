@@ -46,7 +46,7 @@ main = alloca $ \p_num ->
           clGetDeviceInfo devices
                           (clDeviceInfo CLDeviceLocalMemSize)
                           buf
-                          (p_long :: Ptr CLulong)
+                          (p_long :: Ptr CL_ulong)
                           p_param_value_size_ret
 
           local_mem_size <- peekIntConv p_long
