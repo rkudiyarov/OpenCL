@@ -142,12 +142,6 @@ enum CLDeviceInfo {
     CLDeviceExtensions                 = CL_DEVICE_EXTENSIONS,
 };
 
-enum CLContextInfo {
-    CLContextReferenceCount = CL_CONTEXT_REFERENCE_COUNT,
-    CLContextDevices        = CL_CONTEXT_DEVICES,
-    CLContextProperties     = CL_CONTEXT_PROPERTIES,
-};
-
 enum CLDeviceFpConfig {
     CLFpDenorm         = CL_FP_DENORM,
     CLFpInfNan         = CL_FP_INF_NAN,
@@ -155,6 +149,32 @@ enum CLDeviceFpConfig {
     CLFpRoundToZero    = CL_FP_ROUND_TO_ZERO,
     CLFpRoundToInf     = CL_FP_ROUND_TO_INF,
     CLFpFma            = CL_FP_FMA,
+};
+
+enum CLDeviceMemCacheType {
+    CLNone           = CL_NONE,
+    CLReadOnlyCache  = CL_READ_ONLY_CACHE,
+    CLReadWriteCache = CL_READ_WRITE_CACHE,
+};
+
+enum CLDeviceLocalMemType {
+    CLLocal  = CL_LOCAL,
+    CLGlobal = CL_GLOBAL,
+};
+
+enum CLDeviceExecCapabilities {
+    CLExecKernel       = CL_EXEC_KERNEL,
+    CLExecNativeKernel = CL_EXEC_NATIVE_KERNEL,
+};
+
+enum CLContextProperties {
+    CLContextPlatform = CL_CONTEXT_PLATFORM,
+};
+
+enum CLContextInfo {
+    CLContextReferenceCount = CL_CONTEXT_REFERENCE_COUNT,
+    CLContextDevices        = CL_CONTEXT_DEVICES,
+    CLContextProperties     = CL_CONTEXT_PROPERTIES,
 };
 
 enum CLCommandQueueProperties {
@@ -178,6 +198,37 @@ enum CLMemFlags {
     CLMemCopyHostPtr  = CL_MEM_COPY_HOST_PTR,
 };
 
+enum CLChannelOrder {
+    CLR         = CL_R,
+    CLA         = CL_A,
+    CLIntensity = CL_INTENSITY,
+    CLLuminance = CL_LUMINANCE,
+    CLRG        = CL_RG,
+    CLRA        = CL_RA,
+    CLRGB       = CL_RGB,
+    CLRGBA      = CL_RGBA,
+    CLBGRA      = CL_BGRA,
+    CLARGB      = CL_ARGB,
+};
+
+enum CLChannelType {
+    CLSnormInt8      = CL_SNORM_INT8,
+    CLSnormInt16     = CL_SNORM_INT16,
+    CLUnormInt8      = CL_UNORM_INT8,
+    CLUnormInt16     = CL_UNORM_INT16,
+    CLUnormShort565  = CL_UNORM_SHORT_565,
+    CLUnormShort555  = CL_UNORM_SHORT_555,
+    CLUnormInt101010 = CL_UNORM_INT_101010,
+    CLSignedInt8     = CL_SIGNED_INT8,
+    CLSignedInt16    = CL_SIGNED_INT16,
+    CLSignedInt32    = CL_SIGNED_INT32,
+    CLUnsignedInt8   = CL_UNSIGNED_INT8,
+    CLUnsignedInt16  = CL_UNSIGNED_INT16,
+    CLUnsignedInt32  = CL_UNSIGNED_INT32,
+    CLHalfFloat      = CL_HALF_FLOAT,
+    CLFloat          = CL_FLOAT,
+};
+
 enum CLMapFlags {
     CLMapRead  = CL_MAP_READ,
     CLMapWrite = CL_MAP_WRITE,
@@ -193,6 +244,12 @@ enum CLMemInfo {
     CLMemContext        = CL_MEM_CONTEXT,
 };
 
+enum CLMemObjectType {
+    CLMemObjectBuffer  = CL_MEM_OBJECT_BUFFER,
+    CLMemObjectImage2d = CL_MEM_OBJECT_IMAGE2D,
+    CLMemObjectImage3d = CL_MEM_OBJECT_IMAGE3D,
+};
+
 enum CLImageInfo {
     CLImageFormat      = CL_IMAGE_FORMAT,
     CLImageElementSize = CL_IMAGE_ELEMENT_SIZE,
@@ -203,6 +260,17 @@ enum CLImageInfo {
     CLImageDepth       = CL_IMAGE_DEPTH,
 };
 
+enum CLAddressingMode {
+    CLAddressNone        = CL_ADDRESS_NONE,
+    CLAddressClampToEdge = CL_ADDRESS_CLAMP_TO_EDGE,
+    CLAddressClamp       = CL_ADDRESS_CLAMP,
+    CLAddressRepeat      = CL_ADDRESS_REPEAT,
+};
+
+enum CLFilteringMode {
+    CLFilterNearest = CL_FILTER_NEAREST,
+    CLFilterLinear  = CL_FILTER_LINEAR,
+};
 enum CLSamplerInfo {
     CLSamplerReferenceCount   = CL_SAMPLER_REFERENCE_COUNT,
     CLSamplerContext          = CL_SAMPLER_CONTEXT,
@@ -255,6 +323,13 @@ enum CLEventInfo {
     CLEventCommandExecutionStatus = CL_EVENT_COMMAND_EXECUTION_STATUS,
 };
 
+enum CLExecutionStatus {
+    CLComplete  = CL_COMPLETE,
+    CLRunning   = CL_RUNNING,
+    CLSubmitted = CL_SUBMITTED,
+    CLQueued    = CL_QUEUED,
+};
+
 enum CLCommandType {
     CLCommandNdrangeKernel     = CL_COMMAND_NDRANGE_KERNEL,
     CLCommandTask              = CL_COMMAND_TASK,
@@ -289,14 +364,23 @@ enum CLProfilingInfo {
 {#enum CLPlatformInfo           {} deriving (Eq, Show) #}
 {#enum CLDeviceType             {} deriving (Eq, Show) #}
 {#enum CLDeviceInfo             {} deriving (Eq, Show) #}
-{#enum CLContextInfo            {} deriving (Eq, Show) #}
 {#enum CLDeviceFpConfig         {} deriving (Eq, Show) #}
+{#enum CLDeviceMemCacheType     {} deriving (Eq, Show) #}
+{#enum CLDeviceLocalMemType     {} deriving (Eq, Show) #}
+{#enum CLDeviceExecCapabilities {} deriving (Eq, Show) #}
+{#enum CLContextProperties      {} deriving (Eq, Show) #}
+{#enum CLContextInfo            {} deriving (Eq, Show) #}
 {#enum CLCommandQueueProperties {} deriving (Eq, Show) #}
 {#enum CLCommandQueueInfo       {} deriving (Eq, Show) #}
 {#enum CLMemFlags               {} deriving (Eq, Show) #}
+{#enum CLChannelOrder           {} deriving (Eq, Show) #}
+{#enum CLChannelType            {} deriving (Eq, Show) #}
 {#enum CLMapFlags               {} deriving (Eq, Show) #}
 {#enum CLMemInfo                {} deriving (Eq, Show) #}
+{#enum CLMemObjectType          {} deriving (Eq, Show) #}
 {#enum CLImageInfo              {} deriving (Eq, Show) #}
+{#enum CLAddressingMode         {} deriving (Eq, Show) #}
+{#enum CLFilteringMode          {} deriving (Eq, Show) #}
 {#enum CLSamplerInfo            {} deriving (Eq, Show) #}
 {#enum CLProgramInfo            {} deriving (Eq, Show) #}
 {#enum CLProgramBuildInfo       {} deriving (Eq, Show) #}
@@ -304,5 +388,6 @@ enum CLProfilingInfo {
 {#enum CLKernelInfo             {} deriving (Eq, Show) #}
 {#enum CLKernelWorkGroupInfo    {} deriving (Eq, Show) #}
 {#enum CLEventInfo              {} deriving (Eq, Show) #}
+{#enum CLExecutionStatus        {} deriving (Eq, Show) #}
 {#enum CLCommandType            {} deriving (Eq, Show) #}
 {#enum CLProfilingInfo          {} deriving (Eq, Show) #}
