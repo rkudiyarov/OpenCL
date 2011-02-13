@@ -1,5 +1,5 @@
 Name:                   OpenCL
-Version:                0.0.2
+Version:                0.0.3
 Cabal-version:          >= 1.2
 License:                BSD3
 License-file:           LICENSE
@@ -18,6 +18,7 @@ Library
                         Foreign.OpenCL.Raw.V10.Platform
                         Foreign.OpenCL.Raw.V10.Device
                         Foreign.OpenCL.Raw.V10.Context
+                        Foreign.OpenCL.Raw.V10.Runtime
                         Foreign.OpenCL.Raw.C2HS
   Build-tools:          c2hs >= 0.16.2
   Build-depends:        base >=4,

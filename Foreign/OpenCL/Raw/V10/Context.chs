@@ -25,7 +25,7 @@ import Foreign.OpenCL.Raw.V10.Types
   { castPtr       `Ptr CL_context_properties'
   , cl_uint       `CL_uint'
   , castPtr       `Ptr CL_device_id'
-  , castFunPtr    `FunPtr (Ptr CChar -> Ptr () -> CSize -> Ptr () -> ())'
+  , castFunPtr    `FunPtr (Ptr CChar -> Ptr () -> CSize -> Ptr () -> IO ())'
   , castPtr       `Ptr a'
   , castPtr       `Ptr CL_int'
   } -> `CL_context' cl_context
@@ -34,7 +34,7 @@ import Foreign.OpenCL.Raw.V10.Types
 {#fun unsafe clCreateContextFromType as ^
   { castPtr        `Ptr CL_context_properties'
   , cl_device_type `CL_device_type'
-  , castFunPtr     `FunPtr (Ptr CChar -> Ptr () -> CSize -> Ptr () -> ())'
+  , castFunPtr     `FunPtr (Ptr CChar -> Ptr () -> CSize -> Ptr () -> IO ())'
   , castPtr        `Ptr a'
   , castPtr        `Ptr CL_int'
   } -> `CL_context' cl_context

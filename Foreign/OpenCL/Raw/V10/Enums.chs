@@ -14,6 +14,15 @@ module Foreign.OpenCL.Raw.V10.Enums where
 import Foreign.OpenCL.Raw.C2HS
 
 #c
+enum CLVersion {
+    CLVersion10 = CL_VERSION_1_0,
+};
+
+enum CLBool {
+    CLFalse = CL_FALSE,
+    CLTrue  = CL_TRUE,
+};
+
 enum CLError {
     CLSuccess                      = CL_SUCCESS,
     CLDeviceNotFound               = CL_DEVICE_NOT_FOUND,
@@ -138,16 +147,162 @@ enum CLContextInfo {
     CLContextDevices        = CL_CONTEXT_DEVICES,
     CLContextProperties     = CL_CONTEXT_PROPERTIES,
 };
+
+enum CLDeviceFpConfig {
+    CLFpDenorm         = CL_FP_DENORM,
+    CLFpInfNan         = CL_FP_INF_NAN,
+    CLFpRoundToNearest = CL_FP_ROUND_TO_NEAREST,
+    CLFpRoundToZero    = CL_FP_ROUND_TO_ZERO,
+    CLFpRoundToInf     = CL_FP_ROUND_TO_INF,
+    CLFpFma            = CL_FP_FMA,
+};
+
+enum CLCommandQueueProperties {
+    CLQueueOutOfOrderExecModeEnable = CL_QUEUE_OUT_OF_ORDER_EXEC_MODE_ENABLE,
+    CLQueueProfilingEnable          = CL_QUEUE_PROFILING_ENABLE,
+};
+
+enum CLCommandQueueInfo {
+    CLQueueContext        = CL_QUEUE_CONTEXT,
+    CLQueueDevice         = CL_QUEUE_DEVICE,
+    CLQueueReferenceCount = CL_QUEUE_REFERENCE_COUNT,
+    CLQueueProperties     = CL_QUEUE_PROPERTIES,
+};
+
+enum CLMemFlags {
+    CLMemReadWrite    = CL_MEM_READ_WRITE,
+    CLMemWriteOnly    = CL_MEM_WRITE_ONLY,
+    CLMemReadOnly     = CL_MEM_READ_ONLY,
+    CLMemUseHostPtr   = CL_MEM_USE_HOST_PTR,
+    CLMemAllocHostPtr = CL_MEM_ALLOC_HOST_PTR,
+    CLMemCopyHostPtr  = CL_MEM_COPY_HOST_PTR,
+};
+
+enum CLMapFlags {
+    CLMapRead  = CL_MAP_READ,
+    CLMapWrite = CL_MAP_WRITE,
+};
+
+enum CLMemInfo {
+    CLMemType           = CL_MEM_TYPE,
+    CLMemFlags          = CL_MEM_FLAGS,
+    CLMemSize           = CL_MEM_SIZE,
+    CLMemHostPtr        = CL_MEM_HOST_PTR,
+    CLMemMapCount       = CL_MEM_MAP_COUNT,
+    CLMemReferenceCount = CL_MEM_REFERENCE_COUNT,
+    CLMemContext        = CL_MEM_CONTEXT,
+};
+
+enum CLImageInfo {
+    CLImageFormat      = CL_IMAGE_FORMAT,
+    CLImageElementSize = CL_IMAGE_ELEMENT_SIZE,
+    CLImageRowPitch    = CL_IMAGE_ROW_PITCH,
+    CLImageSlicePitch  = CL_IMAGE_SLICE_PITCH,
+    CLImageWidth       = CL_IMAGE_WIDTH,
+    CLImageHeight      = CL_IMAGE_HEIGHT,
+    CLImageDepth       = CL_IMAGE_DEPTH,
+};
+
+enum CLSamplerInfo {
+    CLSamplerReferenceCount   = CL_SAMPLER_REFERENCE_COUNT,
+    CLSamplerContext          = CL_SAMPLER_CONTEXT,
+    CLSamplerNormalizedCoords = CL_SAMPLER_NORMALIZED_COORDS,
+    CLSamplerAddressingMode   = CL_SAMPLER_ADDRESSING_MODE,
+    CLSamplerFilterMode       = CL_SAMPLER_FILTER_MODE,
+};
+
+enum CLProgramInfo {
+    CLProgramReferenceCount = CL_PROGRAM_REFERENCE_COUNT,
+    CLProgramContext        = CL_PROGRAM_CONTEXT,
+    CLProgramNumDevices     = CL_PROGRAM_NUM_DEVICES,
+    CLProgramDevices        = CL_PROGRAM_DEVICES,
+    CLProgramSource         = CL_PROGRAM_SOURCE,
+    CLProgramBinarySizes    = CL_PROGRAM_BINARY_SIZES,
+    CLProgramBinaries       = CL_PROGRAM_BINARIES,
+};
+
+enum CLProgramBuildInfo {
+    CLProgramBuildStatus  = CL_PROGRAM_BUILD_STATUS,
+    CLProgramBuildOptions = CL_PROGRAM_BUILD_OPTIONS,
+    CLProgramBuildLog     = CL_PROGRAM_BUILD_LOG,
+};
+
+enum CLBuildStatus {
+    CLBuildSuccess    = CL_BUILD_SUCCESS,
+    CLBuildNone       = CL_BUILD_NONE,
+    CLBuildError      = CL_BUILD_ERROR,
+    CLBuildInProgress = CL_BUILD_IN_PROGRESS,
+};
+
+enum CLKernelInfo {
+    CLKernelFunctionName   = CL_KERNEL_FUNCTION_NAME,
+    CLKernelNumArgs        = CL_KERNEL_NUM_ARGS,
+    CLKernelReferenceCount = CL_KERNEL_REFERENCE_COUNT,
+    CLKernelContext        = CL_KERNEL_CONTEXT,
+    CLKernelProgram        = CL_KERNEL_PROGRAM,
+};
+
+enum CLKernelWorkGroupInfo {
+    CLKernelWorkGroupSize        = CL_KERNEL_WORK_GROUP_SIZE,
+    CLKernelCompileWorkGroupSize = CL_KERNEL_COMPILE_WORK_GROUP_SIZE,
+    CLKernelLocalMemSize         = CL_KERNEL_LOCAL_MEM_SIZE,
+};
+
+enum CLEventInfo {
+    CLEventCommandQueue           = CL_EVENT_COMMAND_QUEUE,
+    CLEventCommandType            = CL_EVENT_COMMAND_TYPE,
+    CLEventReferenceCount         = CL_EVENT_REFERENCE_COUNT,
+    CLEventCommandExecutionStatus = CL_EVENT_COMMAND_EXECUTION_STATUS,
+};
+
+enum CLCommandType {
+    CLCommandNdrangeKernel     = CL_COMMAND_NDRANGE_KERNEL,
+    CLCommandTask              = CL_COMMAND_TASK,
+    CLCommandNativeKernel      = CL_COMMAND_NATIVE_KERNEL,
+    CLCommandReadBuffer        = CL_COMMAND_READ_BUFFER,
+    CLCommandWriteBuffer       = CL_COMMAND_WRITE_BUFFER,
+    CLCommandCopyBuffer        = CL_COMMAND_COPY_BUFFER,
+    CLCommandReadImage         = CL_COMMAND_READ_IMAGE,
+    CLCommandWriteImage        = CL_COMMAND_WRITE_IMAGE,
+    CLCommandCopyImage         = CL_COMMAND_COPY_IMAGE,
+    CLCommandCopyImageToBuffer = CL_COMMAND_COPY_IMAGE_TO_BUFFER,
+    CLCommandCopyBufferToImage = CL_COMMAND_COPY_BUFFER_TO_IMAGE,
+    CLCommandMapBuffer         = CL_COMMAND_MAP_BUFFER,
+    CLCommandMapImage          = CL_COMMAND_MAP_IMAGE,
+    CLCommandUnmapMemObject    = CL_COMMAND_UNMAP_MEM_OBJECT,
+    CLCommandMarker            = CL_COMMAND_MARKER,
+    CLCommandAcquireGlObjects  = CL_COMMAND_ACQUIRE_GL_OBJECTS,
+    CLCommandReleaseGlObjects  = CL_COMMAND_RELEASE_GL_OBJECTS,
+};
+
+enum CLProfilingInfo {
+    CLProfilingCommandQueued = CL_PROFILING_COMMAND_QUEUED,
+    CLProfilingCommandSubmit = CL_PROFILING_COMMAND_SUBMIT,
+    CLProfilingCommandStart  = CL_PROFILING_COMMAND_START,
+    CLProfilingCommandEnd    = CL_PROFILING_COMMAND_END,
+};
 #endc
 
+{#enum CLVersion                {} deriving (Eq, Show) #}
+{#enum CLBool                   {} deriving (Eq, Show) #}
 {#enum CLError                  {} deriving (Eq, Show) #}
 {#enum CLPlatformInfo           {} deriving (Eq, Show) #}
 {#enum CLDeviceType             {} deriving (Eq, Show) #}
 {#enum CLDeviceInfo             {} deriving (Eq, Show) #}
 {#enum CLContextInfo            {} deriving (Eq, Show) #}
-
-clError a                       = cFromEnum a
-clPlatformInfo a                = cFromEnum a
-clDeviceType a                  = cFromEnum a
-clDeviceInfo a                  = cFromEnum a
-clContextInfo a                 = cFromEnum a
+{#enum CLDeviceFpConfig         {} deriving (Eq, Show) #}
+{#enum CLCommandQueueProperties {} deriving (Eq, Show) #}
+{#enum CLCommandQueueInfo       {} deriving (Eq, Show) #}
+{#enum CLMemFlags               {} deriving (Eq, Show) #}
+{#enum CLMapFlags               {} deriving (Eq, Show) #}
+{#enum CLMemInfo                {} deriving (Eq, Show) #}
+{#enum CLImageInfo              {} deriving (Eq, Show) #}
+{#enum CLSamplerInfo            {} deriving (Eq, Show) #}
+{#enum CLProgramInfo            {} deriving (Eq, Show) #}
+{#enum CLProgramBuildInfo       {} deriving (Eq, Show) #}
+{#enum CLBuildStatus            {} deriving (Eq, Show) #}
+{#enum CLKernelInfo             {} deriving (Eq, Show) #}
+{#enum CLKernelWorkGroupInfo    {} deriving (Eq, Show) #}
+{#enum CLEventInfo              {} deriving (Eq, Show) #}
+{#enum CLCommandType            {} deriving (Eq, Show) #}
+{#enum CLProfilingInfo          {} deriving (Eq, Show) #}
