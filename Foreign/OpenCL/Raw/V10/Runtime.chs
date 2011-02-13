@@ -74,7 +74,7 @@ module Foreign.OpenCL.Raw.V10.Runtime
        )
        where
 
-#include "../inc_opencl.h"
+#include <inc_opencl.h>
 
 import Foreign.OpenCL.Raw.C2HS
 import Foreign.OpenCL.Raw.V10.Types

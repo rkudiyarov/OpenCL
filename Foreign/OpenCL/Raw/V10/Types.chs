@@ -9,7 +9,7 @@
 
 module Foreign.OpenCL.Raw.V10.Types where
 
-#include "../inc_opencl.h"
+#include <inc_opencl.h>
 
 import Foreign
 import Foreign.C

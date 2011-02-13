@@ -9,7 +9,7 @@
 
 module Foreign.OpenCL.Raw.V10.Enums where
 
-#include "../inc_opencl.h"
+#include <inc_opencl.h>
 
 import Foreign.OpenCL.Raw.C2HS
 
