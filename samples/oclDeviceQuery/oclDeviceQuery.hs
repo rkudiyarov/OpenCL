@@ -20,7 +20,7 @@ main = alloca $ \p_num ->
           platform <- peek p_platforms
 
           clGetPlatformInfo platform
-                            (clPlatformInfo CLPlatformName)
+                            (cFromEnum CLPlatformName)
                             buf
                             p_param_value
                             p_param_value_size_ret
@@ -28,7 +28,7 @@ main = alloca $ \p_num ->
           platname <- peekCString p_param_value
 
           clGetDeviceIDs platform
-                         (clDeviceType CLDeviceTypeAll)
+                         (cFromEnum CLDeviceTypeAll)
                          5
                          p_devices
                          p_num
@@ -36,7 +36,7 @@ main = alloca $ \p_num ->
           devices <- peek p_devices
 
           clGetDeviceInfo devices
-                          (clDeviceInfo CLDeviceName)
+                          (cFromEnum CLDeviceName)
                           buf
                           p_param_value
                           p_param_value_size_ret
@@ -44,7 +44,7 @@ main = alloca $ \p_num ->
           device_name <- peekCString p_param_value
 
           clGetDeviceInfo devices
-                          (clDeviceInfo CLDeviceLocalMemSize)
+                          (cFromEnum CLDeviceLocalMemSize)
                           buf
                           (p_long :: Ptr CL_ulong)
                           p_param_value_size_ret
@@ -52,7 +52,7 @@ main = alloca $ \p_num ->
           local_mem_size <- peekIntConv p_long
 
           clGetDeviceInfo devices
-                          (clDeviceInfo CLDeviceMaxConstantBufferSize)
+                          (cFromEnum CLDeviceMaxConstantBufferSize)
                           buf
                           p_long
                           p_param_value_size_ret
