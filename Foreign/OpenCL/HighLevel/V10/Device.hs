@@ -138,15 +138,15 @@ clGetDeviceMaxComputeUnits = clGetDeviceInfoIntegral Raw.CLDeviceMaxComputeUnits
 clGetDeviceMaxWorkItemDimensions :: (Integral i) => Raw.CL_device_id -> IO i
 clGetDeviceMaxWorkItemDimensions = clGetDeviceInfoIntegral Raw.CLDeviceMaxWorkItemDimensions
 
-clGetDeviceMaxWorkItemSizes :: (Storable i, Integral i) => Raw.CL_device_id -> IO [i]
+clGetDeviceMaxWorkItemSizes :: (Integral i) => Raw.CL_device_id -> IO [i]
 clGetDeviceMaxWorkItemSizes device =
     do
     buf <- clGetInfoLength Raw.CLDeviceMaxWorkItemSizes device
     dims <- clGetDeviceMaxWorkItemDimensions device
     allocaArray (Raw.cl_uint dims) $ \p_sizes ->
         do
-        retCode <- Raw.clGetDeviceInfo device (cFromEnum Raw.CLDeviceMaxWorkItemSizes) (Raw.cl_uint buf) (p_sizes) nullPtr
-        clCheckError retCode $ peekArray (Raw.cl_uint dims) p_sizes
+        retCode <- Raw.clGetDeviceInfo device (cFromEnum Raw.CLDeviceMaxWorkItemSizes) (Raw.cl_uint buf) (p_sizes :: Ptr Raw.CL_size) nullPtr
+        clCheckError retCode $ peekArray (Raw.cl_uint dims) p_sizes >>= return . map (cIntConv)
 
 clGetDeviceMaxWorkGroupSize :: (Integral i) => Raw.CL_device_id -> IO i
 clGetDeviceMaxWorkGroupSize = clGetDeviceInfoIntegral Raw.CLDeviceMaxWorkGroupSize
