@@ -9,7 +9,7 @@ showDeviceInfo a = do
                    dv_vendor <- clGetDeviceVendor a
                    dv_pl <- clGetDevicePlatform a
                    dv_dims <- clGetDeviceMaxWorkItemDimensions a
-                   dv_sizes <- clGetDeviceMaxWorkItemSizes a :: IO [Raw.CL_size]
+                   dv_sizes <- clGetDeviceMaxWorkItemSizes a
                    dv_im_sup <- clGetDeviceImageSupport a
                    dv_max_samp <- clGetDeviceMaxSamplers a
                    dv_fp_cfg <- clGetDeviceSingleFpConfig a
