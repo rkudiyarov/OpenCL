@@ -11,7 +11,7 @@ module Foreign.OpenCL.HighLevel.V10.Error
        where
 
 import qualified Foreign.OpenCL.Raw.V10 as Raw
-import qualified Foreign.OpenCL.Raw.C2HS as C
+import Foreign.OpenCL.Raw.C2HS
 
 import Control.Exception
 import Data.Typeable
@@ -21,7 +21,7 @@ instance Exception Raw.CLError
 
 clCheckError :: (Integral i) => i -> IO a -> IO a
 clCheckError retCode result = do
-    let err = C.cToEnum retCode
+    let err = cToEnum retCode
     if err == Raw.CLSuccess
        then result
        else throwIO $ err
