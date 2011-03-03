@@ -19,6 +19,7 @@ import Data.Typeable
 instance Data.Typeable.Typeable Raw.CLError
 instance Exception Raw.CLError
 
+clCheckError :: (Integral i) => i -> IO a -> IO a
 clCheckError retCode result = do
     let err = C.cToEnum retCode
     if err == Raw.CLSuccess
