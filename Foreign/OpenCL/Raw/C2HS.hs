@@ -176,9 +176,14 @@ bits `containsBitMask` bm = let bm' = fromIntegral . fromEnum $ bm
 --   combined yield the bit pattern, instead all contained bit masks are
 --   produced.
 --
-extractBitMasks :: (Bits a, Enum b, Bounded b) => a -> [b]
-extractBitMasks bits = 
-  [bm | bm <- [minBound..maxBound], bits `containsBitMask` bm]
+-- extractBitMasks :: (Bits a, Enum b, Bounded b) => a -> [b]
+-- extractBitMasks bits = 
+--  [bm | bm <- [minBound..maxBound], bits `containsBitMask` bm]
+-- 
+-- Replaced bugged function
+--
+extractBitMasks :: (Integral a, Bits a, Enum b) => a -> [b]
+extractBitMasks bits = map (cToEnum) $ filter (\b -> b .&. bits == b) $ takeWhile (<= bits) [bit i | i <- [0..]]
 
 
 -- Conversion routines
