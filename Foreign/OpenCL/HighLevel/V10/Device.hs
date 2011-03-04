@@ -65,6 +65,7 @@ import qualified Foreign.OpenCL.Raw.V10 as Raw
 import Foreign.OpenCL.Raw.C2HS
 
 import Foreign.OpenCL.HighLevel.V10.Error
+import Foreign.OpenCL.HighLevel.V10.Utils
 
 clGetDeviceCount :: [Raw.CLDeviceType] -> Raw.CL_platform_id -> IO Int
 clGetDeviceCount device_type platform =
@@ -82,49 +83,17 @@ clGetDeviceIDs device_type platform =
         retCode <- Raw.clGetDeviceIDs platform (combineBitMasks device_type) (Raw.cl_uint device_count) p_ids nullPtr
         clCheckError retCode $ peekArray (Raw.cl_uint device_count) p_ids
 
-clGetInfoLength :: (Integral i) => Raw.CLDeviceInfo -> Raw.CL_device_id -> IO i
-clGetInfoLength info device =
-    alloca $ \p_size ->
-        do
-        rC <- Raw.clGetDeviceInfo device (cFromEnum info) 0 nullPtr p_size
-        clCheckError rC $ peekIntConv p_size
-
 clGetDeviceInfoString :: Raw.CLDeviceInfo -> Raw.CL_device_id -> IO String
-clGetDeviceInfoString info device =
-    do
-    buf <- clGetInfoLength info device
-    allocaBytes buf $ \p_void ->
-        do
-        retCode <- Raw.clGetDeviceInfo device (cFromEnum info) (Raw.cl_uint buf) p_void nullPtr
-        clCheckError retCode $ peekCString p_void
+clGetDeviceInfoString = clGetInfoString Raw.clGetDeviceInfo
 
 clGetDeviceInfoIntegral :: (Integral i) => Raw.CLDeviceInfo -> Raw.CL_device_id -> IO i
-clGetDeviceInfoIntegral info device =
-    do
-    buf <- clGetInfoLength info device
-    allocaBytes buf $ \p_void ->
-        do
-        retCode <- Raw.clGetDeviceInfo device (cFromEnum info) (Raw.cl_uint buf) (p_void :: Ptr CULLong) nullPtr
-        clCheckError retCode $ peekIntConv p_void
+clGetDeviceInfoIntegral = clGetInfoIntegral Raw.clGetDeviceInfo
 
 clGetDeviceInfoEnum :: (Enum e) => Raw.CLDeviceInfo -> Raw.CL_device_id -> IO e
-clGetDeviceInfoEnum info device =
-    do
-    buf <- clGetInfoLength info device
-    allocaBytes buf $ \p_void ->
-        do
-        retCode <- Raw.clGetDeviceInfo device (cFromEnum info) (Raw.cl_uint buf) (p_void :: Ptr CLLong) nullPtr
-        clCheckError retCode $ peekEnum p_void
+clGetDeviceInfoEnum = clGetInfoEnum Raw.clGetDeviceInfo
 
 clGetDeviceInfoBitfield :: (Enum e) => Raw.CLDeviceInfo -> Raw.CL_device_id -> IO [e]
-clGetDeviceInfoBitfield info device =
-    do
-    buf <- clGetInfoLength info device
-    allocaBytes buf $ \p_void ->
-        do
-        retCode <- Raw.clGetDeviceInfo device (cFromEnum info) (Raw.cl_uint buf) (p_void :: Ptr CLLong) nullPtr
-        bits <- peekIntConv p_void :: IO CLLong
-        clCheckError retCode $ return $ extractBitMasks bits
+clGetDeviceInfoBitfield = clGetInfoBitfield Raw.clGetDeviceInfo
 
 clGetDeviceType :: Raw.CL_device_id -> IO [Raw.CLDeviceType]
 clGetDeviceType = clGetDeviceInfoBitfield Raw.CLDeviceType
@@ -141,7 +110,7 @@ clGetDeviceMaxWorkItemDimensions = clGetDeviceInfoIntegral Raw.CLDeviceMaxWorkIt
 clGetDeviceMaxWorkItemSizes :: (Integral i) => Raw.CL_device_id -> IO [i]
 clGetDeviceMaxWorkItemSizes device =
     do
-    buf <- clGetInfoLength Raw.CLDeviceMaxWorkItemSizes device
+    buf <- clGetInfoLength Raw.clGetDeviceInfo Raw.CLDeviceMaxWorkItemSizes device
     dims <- clGetDeviceMaxWorkItemDimensions device
     allocaArray (Raw.cl_uint dims) $ \p_sizes ->
         do
@@ -263,13 +232,7 @@ clGetDeviceQueueProperties :: Raw.CL_device_id -> IO [Raw.CLCommandQueueProperti
 clGetDeviceQueueProperties = clGetDeviceInfoBitfield Raw.CLDeviceQueueProperties
 
 clGetDevicePlatform :: Raw.CL_device_id -> IO Raw.CL_platform_id
-clGetDevicePlatform device =
-    do
-    buf <- clGetInfoLength Raw.CLDevicePlatform device
-    allocaBytes buf $ \p_void ->
-        do
-        retCode <- Raw.clGetDeviceInfo device (cFromEnum Raw.CLDevicePlatform) (Raw.cl_uint buf) (p_void :: Ptr Raw.CL_platform_id) nullPtr
-        clCheckError retCode $ peek p_void
+clGetDevicePlatform = clGetInfoObject Raw.clGetDeviceInfo Raw.CLDevicePlatform
 
 clGetDeviceName :: Raw.CL_device_id -> IO String
 clGetDeviceName = clGetDeviceInfoString Raw.CLDeviceName

@@ -23,8 +23,10 @@ Library
 
                         Foreign.OpenCL.HighLevel.V10
                         Foreign.OpenCL.HighLevel.V10.Error
+                        Foreign.OpenCL.HighLevel.V10.Utils
                         Foreign.OpenCL.HighLevel.V10.Platform
                         Foreign.OpenCL.HighLevel.V10.Device
+                        Foreign.OpenCL.HighLevel.V10.Context
 
   Build-tools:          c2hs >= 0.16.2
   Build-depends:        base >=4,
