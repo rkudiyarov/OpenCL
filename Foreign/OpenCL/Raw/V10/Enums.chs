@@ -1,10 +1,11 @@
 --------------------------------------------------------------------------------
 -- |
--- Copyright : (c) [2011] Vadim Zakondyrin
+-- Copyright : (c) [2011] Vadim Zakondyrin, Roman Kudiyarov
 -- License   : BSD
 -- |
 --------------------------------------------------------------------------------
 
+{-# LANGUAGE DeriveDataTypeable #-} 
 {-# LANGUAGE ForeignFunctionInterface #-}
 
 module Foreign.OpenCL.Raw.V10.Enums where
@@ -12,6 +13,7 @@ module Foreign.OpenCL.Raw.V10.Enums where
 #include <inc_opencl.h>
 
 import Foreign.OpenCL.Raw.C2HS
+import Data.Dynamic
 
 #c
 enum CLVersion {
@@ -360,7 +362,7 @@ enum CLProfilingInfo {
 
 {#enum CLVersion                {} deriving (Eq, Show) #}
 {#enum CLBool                   {} deriving (Eq, Show) #}
-{#enum CLError                  {} deriving (Eq, Show) #}
+{#enum CLError                  {} deriving (Eq, Show, Typeable) #}
 {#enum CLPlatformInfo           {} deriving (Eq, Show) #}
 {#enum CLDeviceType             {} deriving (Eq, Show) #}
 {#enum CLDeviceInfo             {} deriving (Eq, Show) #}
