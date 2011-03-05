@@ -1,7 +1,7 @@
 module Main where
 
 import Foreign.OpenCL.V10
-import qualified Foreign.OpenCL.Raw.V10 as Raw
+--import qualified Foreign.OpenCL.Raw.V10.Enums as Raw
 
 showDeviceInfo a = do
                    dv_name <- clGetDeviceName a
@@ -37,7 +37,7 @@ showPlatformInfo a = do
                      pl_vendor <- clGetPlatformVendor a
                      pl_ext <- clGetPlatformExtensions a
                      pl_profile <- clGetPlatformProfile a
-                     devices <- clGetDeviceIDs [Raw.CLDeviceTypeAll] a
+                     devices <- clGetDeviceIDs [CLDeviceTypeAll] a
                      putStr $ "----------------------------\n"
                      putStr $ "Platform:        \t" ++ show a ++ "\n"
                      putStr $ "Platform Name:   \t" ++ show pl_name ++ "\n"
