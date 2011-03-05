@@ -1,6 +1,6 @@
 module Main where
 
-import Foreign.OpenCL.HighLevel.V10
+import Foreign.OpenCL.V10
 import qualified Foreign.OpenCL.Raw.V10 as Raw
 
 showDeviceInfo a = do

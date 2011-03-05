@@ -21,12 +21,12 @@ Library
                         Foreign.OpenCL.Raw.V10.Runtime
                         Foreign.OpenCL.Raw.C2HS
 
-                        Foreign.OpenCL.HighLevel.V10
-                        Foreign.OpenCL.HighLevel.V10.Error
-                        Foreign.OpenCL.HighLevel.V10.Utils
-                        Foreign.OpenCL.HighLevel.V10.Platform
-                        Foreign.OpenCL.HighLevel.V10.Device
-                        Foreign.OpenCL.HighLevel.V10.Context
+                        Foreign.OpenCL.V10
+                        Foreign.OpenCL.V10.Error
+                        Foreign.OpenCL.V10.Utils
+                        Foreign.OpenCL.V10.Platform
+                        Foreign.OpenCL.V10.Device
+                        Foreign.OpenCL.V10.Context
 
   Build-tools:          c2hs >= 0.16.2
   Build-depends:        base >=4,

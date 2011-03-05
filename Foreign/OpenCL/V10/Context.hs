@@ -5,7 +5,7 @@
 -- |
 --------------------------------------------------------------------------------
 
-module Foreign.OpenCL.HighLevel.V10.Context
+module Foreign.OpenCL.V10.Context
        ( ContextProperties (..)
        , clCreateContext
        , clCreateContextFromType
@@ -20,8 +20,8 @@ import qualified Foreign.OpenCL.Raw.V10 as Raw
 import Foreign.OpenCL.Raw.C2HS
 
 import Foreign.Storable
-import Foreign.OpenCL.HighLevel.V10.Error
-import Foreign.OpenCL.HighLevel.V10.Utils
+import Foreign.OpenCL.V10.Error
+import Foreign.OpenCL.V10.Utils
 
 data ContextProperties = ContextPlatform Raw.CL_platform_id
                        | ContextLastProperty

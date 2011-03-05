@@ -5,7 +5,7 @@
 -- |
 --------------------------------------------------------------------------------
 
-module Foreign.OpenCL.HighLevel.V10.Error
+module Foreign.OpenCL.V10.Error
        ( clCheckError
        )
        where
