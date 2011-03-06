@@ -5,7 +5,7 @@
 -- |
 --------------------------------------------------------------------------------
 
-module Foreign.OpenCL.HighLevel.V10.Platform
+module Foreign.OpenCL.V10.Platform
        ( clGetPlatformCount
        , clGetPlatformIDs
        , clGetPlatformProfile
@@ -19,8 +19,8 @@ module Foreign.OpenCL.HighLevel.V10.Platform
 import qualified Foreign.OpenCL.Raw.V10 as Raw
 import Foreign.OpenCL.Raw.C2HS
 
-import Foreign.OpenCL.HighLevel.V10.Error
-import Foreign.OpenCL.HighLevel.V10.Utils
+import Foreign.OpenCL.V10.Error
+import Foreign.OpenCL.V10.Utils
 
 clGetPlatformCount :: IO Int
 clGetPlatformCount =

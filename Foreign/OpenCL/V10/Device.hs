@@ -5,7 +5,7 @@
 -- |
 --------------------------------------------------------------------------------
 
-module Foreign.OpenCL.HighLevel.V10.Device
+module Foreign.OpenCL.V10.Device
        ( clGetDeviceCount
        , clGetDeviceIDs
        , clGetDeviceType
@@ -64,8 +64,8 @@ module Foreign.OpenCL.HighLevel.V10.Device
 import qualified Foreign.OpenCL.Raw.V10 as Raw
 import Foreign.OpenCL.Raw.C2HS
 
-import Foreign.OpenCL.HighLevel.V10.Error
-import Foreign.OpenCL.HighLevel.V10.Utils
+import Foreign.OpenCL.V10.Error
+import Foreign.OpenCL.V10.Utils
 
 clGetDeviceCount :: [Raw.CLDeviceType] -> Raw.CL_platform_id -> IO Int
 clGetDeviceCount device_type platform =

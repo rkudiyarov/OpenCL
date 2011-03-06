@@ -5,7 +5,7 @@
 -- |
 --------------------------------------------------------------------------------
 
-module Foreign.OpenCL.HighLevel.V10.Utils
+module Foreign.OpenCL.V10.Utils
        ( clRetain
        , clRelease
        , clGetInfoLength
@@ -21,7 +21,7 @@ module Foreign.OpenCL.HighLevel.V10.Utils
 import qualified Foreign.OpenCL.Raw.V10 as Raw
 import Foreign.OpenCL.Raw.C2HS
 
-import Foreign.OpenCL.HighLevel.V10.Error
+import Foreign.OpenCL.V10.Error
 
 --
 -- Retain and release functions the same for all objects.
