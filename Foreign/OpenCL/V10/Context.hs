@@ -13,6 +13,7 @@ module Foreign.OpenCL.V10.Context
        , clReleaseContext
        , clGetContextReferenceCount
        , clGetContextDevices
+       , clGetContextProperties
        )
        where
 
@@ -25,17 +26,18 @@ import Foreign.OpenCL.V10.Utils
 
 data ContextProperties = ContextPlatform Raw.CL_platform_id
                        | ContextLastProperty
+                       deriving (Show, Eq)
 
 instance Storable ContextProperties where
-    sizeOf (ContextPlatform p) = sizeOf (0 :: CLLong) + sizeOf (p :: Raw.CL_platform_id)
-    sizeOf ContextLastProperty = sizeOf (0 :: CLLong)
+    sizeOf (ContextPlatform p) = sizeOf (undefined :: Raw.CL_context_properties) + sizeOf (undefined :: Raw.CL_platform_id)
+    sizeOf ContextLastProperty = sizeOf (undefined :: Raw.CL_context_properties)
 
-    alignment _ = alignment (0 :: CLLong)
+    alignment _ = alignment (undefined :: Raw.CL_context_properties)
 
     peek ptr =
         do
-        t <- peekIntConv (castPtr ptr :: Ptr CLLong)
-        v <- peekByteOff ptr $ sizeOf (0 :: CLLong)
+        t <- peekIntConv (castPtr ptr :: Ptr Raw.CL_context_properties)
+        v <- peekByteOff ptr $ sizeOf (undefined :: Raw.CL_context_properties)
         let iov | t == 0 = ContextLastProperty
                 | t == cFromEnum Raw.CLContextPlatform = ContextPlatform v
                 | otherwise = ContextLastProperty
@@ -43,15 +45,36 @@ instance Storable ContextProperties where
 
     poke ptr (ContextPlatform p) =
         do
-        putStrLn "CP 1"
-        poke (castPtr ptr :: Ptr CLLong) (cFromEnum Raw.CLContextPlatform)
-        putStrLn "CP 2"
-        pokeByteOff (castPtr ptr :: Ptr Raw.CL_platform_id) (sizeOf (0 :: CLLong)) p
+        poke (castPtr ptr :: Ptr Raw.CL_context_properties) (cFromEnum Raw.CLContextPlatform)
+        pokeByteOff (castPtr ptr :: Ptr Raw.CL_platform_id) (sizeOf (undefined :: Ptr Raw.CL_context_properties)) p
 
     poke ptr ContextLastProperty =
         do
-        putStrLn "CLP 1"
-        poke (castPtr ptr :: Ptr CLLong) 0
+        poke (castPtr ptr :: Ptr Raw.CL_context_properties) 0
+
+propListToData :: [ContextProperties] -> IO (Ptr ContextProperties)
+propListToData ps =
+    do
+    ptr <- mallocBytes $ sizeOfList ps 0
+    writeData ptr ps
+    return ptr
+    where sizeOfList [] s = s
+          sizeOfList (l:ls) s = sizeOfList ls (s + sizeOf l)
+          writeData ptr [] = poke ptr ContextLastProperty >> return ()
+          writeData ptr (p:ps) = do
+                                 poke ptr p
+                                 writeData (ptr `plusPtr` sizeOf p) ps
+
+propDataToList :: Ptr ContextProperties -> IO [ContextProperties]
+propDataToList ptr =
+    do
+    readData ptr []
+    where readData p ps =
+              do
+              prop <- peek p
+              case prop of
+                  ContextLastProperty -> return ps
+                  (ContextPlatform pl) -> readData (p `plusPtr` sizeOf prop) (prop:ps)
 
 -- TODO: to add a callback function with user data to clCreateContext and clCreateContextFromType.
 -- TODO: to create data from list of properties, may be through instance of Storable
@@ -60,7 +83,7 @@ clCreateContext :: [ContextProperties] -> [Raw.CL_device_id] -> IO Raw.CL_contex
 clCreateContext ps ds =
     alloca $ \p_err ->
         do
-        prop_ptr <- newArray0 ContextLastProperty ps
+        prop_ptr <- propListToData ps
         dev_ptr <- newArray ds
         context <- Raw.clCreateContext (castPtr prop_ptr) (Raw.cl_uint $ length ds) dev_ptr nullFunPtr nullPtr p_err
         free dev_ptr
@@ -72,7 +95,7 @@ clCreateContextFromType :: [ContextProperties] -> [Raw.CLDeviceType] -> IO Raw.C
 clCreateContextFromType ps dt =
     alloca $ \p_err ->
         do
-        prop_ptr <- newArray0 ContextLastProperty ps
+        prop_ptr <- propListToData ps
         context <- Raw.clCreateContextFromType (castPtr prop_ptr) (combineBitMasks dt) nullFunPtr nullPtr p_err
         free prop_ptr
         retCode <- peek p_err
@@ -89,3 +112,13 @@ clGetContextReferenceCount = clGetInfoIntegral Raw.clGetContextInfo Raw.CLContex
 
 clGetContextDevices :: Raw.CL_context -> IO [Raw.CL_device_id]
 clGetContextDevices = clGetInfoObjectsArray Raw.clGetContextInfo Raw.CLContextDevices
+
+clGetContextProperties :: Raw.CL_context -> IO [ContextProperties]
+clGetContextProperties c = 
+    do
+    buf <- clGetInfoLength Raw.clGetContextInfo Raw.CLContextProperties c
+    allocaBytes buf $ \p_void ->
+        do
+        retCode <- Raw.clGetContextInfo c (cFromEnum Raw.CLContextProperties) (Raw.cl_uint buf) p_void nullPtr
+        ob <- peek p_void
+        clCheckError retCode $ propDataToList p_void
