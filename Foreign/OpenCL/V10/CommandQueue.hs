@@ -14,6 +14,9 @@ module Foreign.OpenCL.V10.CommandQueue
        , clGetCommandQueueReferenceCount
        , clGetCommandQueueProperties
        , clSetCommandQueueProperty
+       , clEnqueueMarker
+       , clEnqueueWaitForEvents
+       , clEnqueueBarrier
        , clFlush
        , clFinish
        )
@@ -58,6 +61,25 @@ clSetCommandQueueProperty cq nps b =
         retCode <- Raw.clSetCommandQueueProperty cq (combineBitMasks nps) (cFromEnum b) p_ops
         ops <- peek p_ops
         clCheckError retCode $ return $ extractBitMasks ops
+
+clEnqueueMarker :: Raw.CL_command_queue -> IO Raw.CL_event
+clEnqueueMarker cq =
+    alloca $ \p_e ->
+        do
+        retCode <- Raw.clEnqueueMarker cq p_e
+        clCheckError retCode $ peek p_e
+
+clEnqueueWaitForEvents :: Raw.CL_command_queue -> [Raw.CL_event] -> IO ()
+clEnqueueWaitForEvents cq evs =
+    do
+    let num_events = length evs
+    event_list <- newArray evs
+    retCode <- Raw.clEnqueueWaitForEvents cq (Raw.cl_uint num_events) event_list
+    free event_list
+    clCheckError retCode $ return ()
+
+clEnqueueBarrier :: Raw.CL_command_queue -> IO ()
+clEnqueueBarrier = simpleFunction Raw.clEnqueueBarrier
 
 clFlush :: Raw.CL_command_queue -> IO ()
 clFlush = simpleFunction Raw.clFlush
