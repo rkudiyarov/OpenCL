@@ -14,6 +14,10 @@ module Foreign.OpenCL.V10.Event
        , clGetEventReferenceCount
        , clRetainEvent
        , clReleaseEvent
+       , clGetEventProfilingCommandQueued
+       , clGetEventProfilingCommandSubmit
+       , clGetEventProfilingCommandStart
+       , clGetEventProfilingCommandEnd
        )
        where
 
@@ -58,3 +62,18 @@ clRetainEvent = clRetain Raw.clRetainEvent
 
 clReleaseEvent :: Raw.CL_event -> IO ()
 clReleaseEvent = clRelease Raw.clReleaseEvent
+
+clGetEventProfilingInfoIntegral :: (Integral i) => Raw.CLProfilingInfo -> Raw.CL_event -> IO i
+clGetEventProfilingInfoIntegral = clGetInfoIntegral Raw.clGetEventProfilingInfo
+
+clGetEventProfilingCommandQueued :: (Integral i) => Raw.CL_event -> IO i
+clGetEventProfilingCommandQueued = clGetEventProfilingInfoIntegral Raw.CLProfilingCommandQueued
+
+clGetEventProfilingCommandSubmit :: (Integral i) => Raw.CL_event -> IO i
+clGetEventProfilingCommandSubmit = clGetEventProfilingInfoIntegral Raw.CLProfilingCommandSubmit
+
+clGetEventProfilingCommandStart :: (Integral i) => Raw.CL_event -> IO i
+clGetEventProfilingCommandStart = clGetEventProfilingInfoIntegral Raw.CLProfilingCommandStart
+
+clGetEventProfilingCommandEnd :: (Integral i) => Raw.CL_event -> IO i
+clGetEventProfilingCommandEnd = clGetEventProfilingInfoIntegral Raw.CLProfilingCommandEnd
