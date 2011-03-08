@@ -67,17 +67,17 @@ import Foreign.OpenCL.Raw.C2HS
 import Foreign.OpenCL.V10.Error
 import Foreign.OpenCL.V10.Utils
 
-clGetDeviceCount :: [Raw.CLDeviceType] -> Raw.CL_platform_id -> IO Int
-clGetDeviceCount device_type platform =
+clGetDeviceCount :: Raw.CL_platform_id -> [Raw.CLDeviceType] -> IO Int
+clGetDeviceCount platform device_type =
     alloca $ \p_num ->
         do
         retCode <- Raw.clGetDeviceIDs platform (combineBitMasks device_type) 0 nullPtr p_num
         clCheckError retCode $ peekIntConv p_num
 
-clGetDeviceIDs :: [Raw.CLDeviceType] -> Raw.CL_platform_id -> IO [Raw.CL_device_id]
-clGetDeviceIDs device_type platform =
+clGetDeviceIDs :: Raw.CL_platform_id -> [Raw.CLDeviceType] -> IO [Raw.CL_device_id]
+clGetDeviceIDs platform device_type =
     do
-    device_count <- clGetDeviceCount device_type platform
+    device_count <- clGetDeviceCount platform device_type
     allocaArray (Raw.cl_uint device_count) $ \p_ids ->
         do
         retCode <- Raw.clGetDeviceIDs platform (combineBitMasks device_type) (Raw.cl_uint device_count) p_ids nullPtr

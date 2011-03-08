@@ -114,7 +114,7 @@ clGetContextDevices :: Raw.CL_context -> IO [Raw.CL_device_id]
 clGetContextDevices = clGetInfoObjectsArray Raw.clGetContextInfo Raw.CLContextDevices
 
 clGetContextProperties :: Raw.CL_context -> IO [ContextProperties]
-clGetContextProperties c = 
+clGetContextProperties c =
     do
     buf <- clGetInfoLength Raw.clGetContextInfo Raw.CLContextProperties c
     allocaBytes buf $ \p_void ->

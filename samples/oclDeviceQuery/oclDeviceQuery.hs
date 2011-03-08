@@ -37,7 +37,7 @@ showPlatformInfo a = do
                      pl_vendor <- clGetPlatformVendor a
                      pl_ext <- clGetPlatformExtensions a
                      pl_profile <- clGetPlatformProfile a
-                     devices <- clGetDeviceIDs [CLDeviceTypeAll] a
+                     devices <- clGetDeviceIDs a [CLDeviceTypeAll]
                      putStr $ "----------------------------\n"
                      putStr $ "Platform:        \t" ++ show a ++ "\n"
                      putStr $ "Platform Name:   \t" ++ show pl_name ++ "\n"
