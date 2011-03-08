@@ -14,6 +14,7 @@ module Foreign.OpenCL.V10
        , module Foreign.OpenCL.V10.Device
        , module Foreign.OpenCL.V10.Context
        , module Foreign.OpenCL.V10.CommandQueue
+       , module Foreign.OpenCL.V10.Sampler
        ) where
 
 import Foreign.OpenCL.V10.Error
@@ -22,5 +23,6 @@ import Foreign.OpenCL.V10.Platform
 import Foreign.OpenCL.V10.Device
 import Foreign.OpenCL.V10.Context
 import Foreign.OpenCL.V10.CommandQueue
+import Foreign.OpenCL.V10.Sampler
 import Foreign.OpenCL.Raw.V10.Types
 import Foreign.OpenCL.Raw.V10.Enums

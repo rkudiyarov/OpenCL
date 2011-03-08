@@ -269,10 +269,11 @@ enum CLAddressingMode {
     CLAddressRepeat      = CL_ADDRESS_REPEAT,
 };
 
-enum CLFilteringMode {
+enum CLFilterMode {
     CLFilterNearest = CL_FILTER_NEAREST,
     CLFilterLinear  = CL_FILTER_LINEAR,
 };
+
 enum CLSamplerInfo {
     CLSamplerReferenceCount   = CL_SAMPLER_REFERENCE_COUNT,
     CLSamplerContext          = CL_SAMPLER_CONTEXT,
@@ -382,7 +383,7 @@ enum CLProfilingInfo {
 {#enum CLMemObjectType          {} deriving (Eq, Show) #}
 {#enum CLImageInfo              {} deriving (Eq, Show) #}
 {#enum CLAddressingMode         {} deriving (Eq, Show) #}
-{#enum CLFilteringMode          {} deriving (Eq, Show) #}
+{#enum CLFilterMode             {} deriving (Eq, Show) #}
 {#enum CLSamplerInfo            {} deriving (Eq, Show) #}
 {#enum CLProgramInfo            {} deriving (Eq, Show) #}
 {#enum CLProgramBuildInfo       {} deriving (Eq, Show) #}

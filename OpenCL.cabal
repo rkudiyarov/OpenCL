@@ -28,6 +28,7 @@ Library
                         Foreign.OpenCL.V10.Device
                         Foreign.OpenCL.V10.Context
                         Foreign.OpenCL.V10.CommandQueue
+                        Foreign.OpenCL.V10.Sampler
 
   Build-tools:          c2hs >= 0.16.2
   Build-depends:        base >=4,
