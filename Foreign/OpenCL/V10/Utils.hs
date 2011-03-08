@@ -6,7 +6,8 @@
 --------------------------------------------------------------------------------
 
 module Foreign.OpenCL.V10.Utils
-       ( clRetain
+       ( simpleFunction
+       , clRetain
        , clRelease
        , clGetInfoLength
        , clGetInfoString
@@ -23,21 +24,21 @@ import Foreign.OpenCL.Raw.C2HS
 
 import Foreign.OpenCL.V10.Error
 
+simpleFunction :: (a -> IO Raw.CL_int) -> a -> IO ()
+simpleFunction f o =
+    do
+    retCode <- f o
+    clCheckError retCode $ return ()
+
 --
 -- Retain and release functions the same for all objects.
 --
 
 clRetain :: (a -> IO Raw.CL_int) -> a -> IO ()
-clRetain f o =
-    do
-    retCode <- f o
-    clCheckError retCode $ return ()
+clRetain = simpleFunction
 
 clRelease :: (a -> IO Raw.CL_int) -> a -> IO ()
-clRelease f o =
-    do
-    retCode <- f o
-    clCheckError retCode $ return ()
+clRelease = simpleFunction
 
 --
 -- Functions for getting information from all objects.

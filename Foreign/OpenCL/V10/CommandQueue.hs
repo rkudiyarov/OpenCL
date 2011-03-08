@@ -14,6 +14,8 @@ module Foreign.OpenCL.V10.CommandQueue
        , clGetCommandQueueReferenceCount
        , clGetCommandQueueProperties
        , clSetCommandQueueProperty
+       , clFlush
+       , clFinish
        )
        where
 
@@ -56,3 +58,9 @@ clSetCommandQueueProperty cq nps b =
         retCode <- Raw.clSetCommandQueueProperty cq (combineBitMasks nps) (cFromEnum b) p_ops
         ops <- peek p_ops
         clCheckError retCode $ return $ extractBitMasks ops
+
+clFlush :: Raw.CL_command_queue -> IO ()
+clFlush = simpleFunction Raw.clFlush
+
+clFinish :: Raw.CL_command_queue -> IO ()
+clFinish = simpleFunction Raw.clFinish
