@@ -30,6 +30,8 @@ Library
                         Foreign.OpenCL.V10.CommandQueue
                         Foreign.OpenCL.V10.Memory
                         Foreign.OpenCL.V10.Sampler
+                        Foreign.OpenCL.V10.Program
+                        Foreign.OpenCL.V10.Kernel
                         Foreign.OpenCL.V10.Event
 
   Build-tools:          c2hs >= 0.16.2
