@@ -19,8 +19,8 @@ module Foreign.OpenCL.V10.Kernel
        , clGetKernelWorkGroupSize
        , clGetKernelCompileWorkGroupSize
        , clGetKernelLocalMemSize
---       , clEnqueueNDRangeKernel
---       , clEnqueueTask
+       , clEnqueueNDRangeKernel
+       , clEnqueueTask
 --       , clEnqueueNativeKernel
        )
        where
@@ -95,13 +95,30 @@ clGetKernelCompileWorkGroupSize k d =
         gs <- peekArray 3 p_gs
         clCheckError retCode $ return $ map (fromIntegral) gs
 
-
 clGetKernelLocalMemSize :: (Integral i) => Raw.CL_kernel -> Raw.CL_device_id -> IO i
 clGetKernelLocalMemSize = clGetInfoIntegralWDI Raw.clGetKernelWorkGroupInfo Raw.CLKernelLocalMemSize
-{-
-clEnqueueNDRangeKernel
-clEnqueueNDRangeKernel
 
-clEnqueueTask
-clEnqueueTask
--}
+--
+-- global work offset should be nullPtr in opencl 1.0,
+-- but not local work size
+-- FIXME: [] => nullPtr
+--
+clEnqueueNDRangeKernel :: Raw.CL_command_queue -> Raw.CL_kernel -> [Raw.CL_size] -> [Raw.CL_size] -> [Raw.CL_size] -> [Raw.CL_event] -> IO Raw.CL_event
+clEnqueueNDRangeKernel cq k gwo gws lws evs =
+    withArray gwo $ \p_gwo ->
+        withArray gws $ \p_gws ->
+            withArray lws $ \p_lws ->
+                withArray evs $ \p_evs ->
+                    alloca $ \p_e ->
+                        do
+                        let wd = max (length lws) $ max (length gwo) (length gws)
+                        retCode <- Raw.clEnqueueNDRangeKernel cq k (Raw.cl_size wd) nullPtr{-p_gwo-} p_gws nullPtr{-p_lws-} (Raw.cl_uint $ length evs) p_evs p_e
+                        clCheckError retCode $ peek p_e
+
+clEnqueueTask :: Raw.CL_command_queue -> Raw.CL_kernel -> [Raw.CL_event] -> IO Raw.CL_event
+clEnqueueTask cq k evs =
+    withArray evs $ \p_evs ->
+        alloca $ \p_e ->
+            do
+            retCode <- Raw.clEnqueueTask cq k (Raw.cl_uint $ length evs) p_evs p_e
+            clCheckError retCode $ peek p_e

@@ -10,7 +10,7 @@ module Foreign.OpenCL.V10.Program
 --       , clCreateProgramWithBinary
        , clRetainProgram
        , clReleaseProgram
---       , clBuildProgram
+       , clBuildProgram
        , clUnloadCompiler
        , clGetProgramReferenceCount
        , clGetProgramContext
@@ -59,9 +59,15 @@ clReleaseProgram :: Raw.CL_program -> IO ()
 clReleaseProgram = clRelease Raw.clReleaseProgram
 
 --
--- TODO: to implement clBuildProgram
--- with callback
+-- TODO: to implement callback for clBuildProgram
 --
+clBuildProgram :: Raw.CL_program -> [Raw.CL_device_id] -> String -> IO ()
+clBuildProgram p dvs opt =
+    withArray dvs $ \p_dvs ->
+        withCString opt $ \p_opt ->
+            do
+            retCode <- Raw.clBuildProgram p (Raw.cl_uint $ length dvs) p_dvs p_opt nullFunPtr nullPtr
+            clCheckError retCode $ return ()
 
 clUnloadCompiler :: IO ()
 clUnloadCompiler =
