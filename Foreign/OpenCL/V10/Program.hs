@@ -7,7 +7,7 @@
 
 module Foreign.OpenCL.V10.Program
        ( clCreateProgramWithSource
---       , clCreateProgramWithBinary
+       , clCreateProgramWithBinary
        , clRetainProgram
        , clReleaseProgram
        , clBuildProgram
@@ -17,8 +17,9 @@ module Foreign.OpenCL.V10.Program
        , clGetProgramNumDevices
        , clGetProgramDevices
        , clGetProgramSource
---       , clGetProgramBinarySizes
---       , clGetProgramBinaries
+       , clGetProgramBinarySizes
+       , clGetProgramBinaries
+       , clGetProgramBinariesWithSizes
        , clGetProgramBuildStatus
        , clGetProgramBuildOptions
        , clGetProgramBuildLog
@@ -46,11 +47,22 @@ clCreateProgramWithSource c ss =
           retCode <- peek p_e
           clCheckError retCode $ return pr
 
---
--- TODO: to implement clCreateProgramWithBinary
---
---clCreateProgramWithBinary :: Raw.CL_context -> [Raw.CL_device_id] -> ... -> IO Raw.CL_program
---
+clCreateProgramWithBinary :: Raw.CL_context -> [Raw.CL_device_id] -> [(Raw.CL_size, Ptr CUChar)] -> IO (Raw.CL_program, [Raw.CL_bool])
+clCreateProgramWithBinary c dvs bns =
+    do
+    let count = length bns
+    let sizes = map (Raw.cl_size . fst) bns
+    let ptrs = map (snd) bns
+    withArray sizes $ \p_sizes ->
+     withArray ptrs $ \p_ptrs ->
+      withArray dvs $ \p_dvs ->
+       allocaArray count $ \p_bin_status ->
+        alloca $ \p_e ->
+            do
+            pr <- Raw.clCreateProgramWithBinary c (Raw.cl_uint $ length dvs) p_dvs p_sizes p_ptrs p_bin_status p_e
+            retCode <- peek p_e
+            bin_status <- peekArray count p_bin_status
+            clCheckError retCode $ return (pr, map cToEnum bin_status)
 
 clRetainProgram :: Raw.CL_program -> IO ()
 clRetainProgram = clRetain Raw.clRetainProgram
@@ -90,8 +102,18 @@ clGetProgramDevices = clGetInfoObjectsArray Raw.clGetProgramInfo Raw.CLProgramDe
 clGetProgramSource :: Raw.CL_program -> IO String
 clGetProgramSource = clGetInfoString Raw.clGetProgramInfo Raw.CLProgramSource
 
---clGetProgramBinarySizes :: (Integral i) => Raw.CL_program -> IO [i]
---clGetProgramBinarySizes = clGetInfoObjectsArray Raw.clGetProgramInfo Raw.CLProgramBinarySizes
+clGetProgramBinarySizes :: Raw.CL_program -> IO [Raw.CL_size]
+clGetProgramBinarySizes = clGetInfoObjectsArray Raw.clGetProgramInfo Raw.CLProgramBinarySizes
+
+clGetProgramBinaries :: Raw.CL_program -> IO [Ptr CUChar]
+clGetProgramBinaries = clGetInfoObjectsArray Raw.clGetProgramInfo Raw.CLProgramBinaries
+
+clGetProgramBinariesWithSizes :: Raw.CL_program -> IO [(Raw.CL_size, Ptr CUChar)]
+clGetProgramBinariesWithSizes p =
+    do
+    bin_sizes <- clGetProgramBinarySizes p
+    bins <- clGetProgramBinaries p
+    return $ zipWith (\x -> \y -> (x,y)) bin_sizes bins
 
 clGetProgramBuildStatus :: Raw.CL_program -> Raw.CL_device_id -> IO Raw.CLBuildStatus
 clGetProgramBuildStatus p d =
@@ -107,5 +129,3 @@ clGetProgramBuildOptions = clGetInfoStringWDI Raw.clGetProgramBuildInfo Raw.CLPr
 
 clGetProgramBuildLog :: Raw.CL_program -> Raw.CL_device_id -> IO String
 clGetProgramBuildLog = clGetInfoStringWDI Raw.clGetProgramBuildInfo Raw.CLProgramBuildLog
-
---clGetProgramBuildInfo
