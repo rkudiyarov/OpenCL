@@ -196,9 +196,12 @@ clGetMemObjectList m =
     do
     size <- clGetMemObjectSize m
     ptr <- clGetMemObjectHostPtr m
-    obj <- peek ptr
-    let s = size `div` sizeOf obj
-    peekArray s ptr
+    if ptr == nullPtr
+         then return []
+         else do
+              obj <- peek ptr
+              let s = size `div` sizeOf obj
+              peekArray s ptr
 
 clGetMemObjectMapCount :: (Integral i) => Raw.CL_mem -> IO i
 clGetMemObjectMapCount = clGetMemObjectInfoIntegral Raw.CLMemMapCount
