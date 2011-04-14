@@ -1,0 +1,11 @@
+autom4te.cache/*
+autoscan.log
+*.o
+*.hi
+dist/*
+config.log
+config.status
+configure.scan
+samples/memTest/memTest
+samples/oclDeviceQuery/oclDeviceQuery
+samples/oclVectorAdd/oclVectorAdd
