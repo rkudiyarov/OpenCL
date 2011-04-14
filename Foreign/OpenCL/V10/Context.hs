@@ -53,6 +53,7 @@ instance Storable ContextProperties where
         poke (castPtr ptr :: Ptr Raw.CL_context_properties) 0
 
 propListToData :: [ContextProperties] -> IO (Ptr ContextProperties)
+propListToData [] = return( nullPtr )
 propListToData ps =
     do
     ptr <- mallocBytes $ sizeOfList ps 0
@@ -81,7 +82,7 @@ propDataToList ptr =
 
 clCreateContext :: [ContextProperties] -> [Raw.CL_device_id] -> IO Raw.CL_context
 clCreateContext ps ds =
-    alloca $ \p_err ->
+    alloca $ \p_err -> 
         do
         prop_ptr <- propListToData ps
         dev_ptr <- newArray ds

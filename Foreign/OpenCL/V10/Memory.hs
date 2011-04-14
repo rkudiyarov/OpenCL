@@ -82,7 +82,9 @@ clEnqueueReadBufferToPtr cq m b offset cb ptr evs =
     alloca $ \p_ev ->
         do
         let n_evs = Raw.cl_uint $ length evs
-        p_evs <- newArray evs
+        p_evs <- case evs of 
+                 [] -> return(nullPtr)
+                 otherwise -> newArray evs
         retCode <- Raw.clEnqueueReadBuffer cq m (cFromEnum b) (Raw.cl_size offset) (Raw.cl_size cb) ptr n_evs p_evs p_ev
         free p_evs
         clCheckError retCode $ peek p_ev
@@ -113,7 +115,9 @@ clEnqueueWriteBufferFromPtr cq m b offset cb ptr evs =
     alloca $ \p_ev ->
         do
         let n_evs = Raw.cl_uint $ length evs
-        p_evs <- newArray evs
+        p_evs <- case evs of 
+                 [] -> return(nullPtr)
+                 otherwise -> newArray evs
         retCode <- Raw.clEnqueueWriteBuffer cq m (cFromEnum b) (Raw.cl_size offset) (Raw.cl_size cb) ptr n_evs p_evs p_ev
         free p_evs
         clCheckError retCode $ peek p_ev

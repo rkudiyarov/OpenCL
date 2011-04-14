@@ -26,11 +26,12 @@ main =
                  let pl = head pls
                  dvs <- clGetDeviceIDs pl [CLDeviceTypeAll]
                  let dv = head dvs
-                 ctx <- clCreateContext [] dvs
+                 ctx <- clCreateContext [] dvs --fix for osx
+                 --ctx <- clCreateContext [ContextPlatform $ head pls] dvs
                  cq  <- clCreateCommandQueue ctx dv []
-                 cmDevSrcA <- clCreateBufferFromPtr ctx [CLMemReadOnly] (arrayLength srcA) p_srcA
-                 cmDevSrcB <- clCreateBufferFromPtr ctx [CLMemReadOnly] (arrayLength srcB) p_srcB
-                 cmDevDst <- clCreateBufferFromPtr ctx [CLMemWriteOnly] (arrayLength srcA) (p_dst :: Ptr CL_float)
+                 cmDevSrcA <- clCreateBufferFromPtr ctx [CLMemUseHostPtr] (arrayLength srcA) p_srcA
+                 cmDevSrcB <- clCreateBufferFromPtr ctx [CLMemUseHostPtr] (arrayLength srcB) p_srcB
+                 cmDevDst <- clCreateBufferFromPtr ctx [CLMemUseHostPtr] (arrayLength srcA) (p_dst :: Ptr CL_float)
                  source <- readFile "vectorAdd.cl"
                  pr <- clCreateProgramWithSource ctx [source]
                  clBuildProgram pr dvs []

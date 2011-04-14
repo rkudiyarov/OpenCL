@@ -103,12 +103,13 @@ clGetKernelLocalMemSize = clGetInfoIntegralWDI Raw.clGetKernelWorkGroupInfo Raw.
 -- but not local work size
 -- FIXME: [] => nullPtr
 --
+
 clEnqueueNDRangeKernel :: Raw.CL_command_queue -> Raw.CL_kernel -> [Raw.CL_size] -> [Raw.CL_size] -> [Raw.CL_size] -> [Raw.CL_event] -> IO Raw.CL_event
 clEnqueueNDRangeKernel cq k gwo gws lws evs =
-    withArray gwo $ \p_gwo ->
-        withArray gws $ \p_gws ->
-            withArray lws $ \p_lws ->
-                withArray evs $ \p_evs ->
+    withArrayOrNP gwo $ \p_gwo ->
+        withArrayOrNP gws $ \p_gws ->
+            withArrayOrNP lws $ \p_lws ->
+                withArrayOrNP evs $ \p_evs ->
                     alloca $ \p_e ->
                         do
                         let wd = max (length lws) $ max (length gwo) (length gws)

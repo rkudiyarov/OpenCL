@@ -19,6 +19,7 @@ module Foreign.OpenCL.V10.Utils
        , clGetInfoLengthWDI
        , clGetInfoIntegralWDI
        , clGetInfoStringWDI
+       , withArrayOrNP
        )
        where
 
@@ -143,3 +144,8 @@ clGetInfoStringWDI f i o d =
         do
         retCode <- f o d (cFromEnum i) (Raw.cl_uint buf) p_void nullPtr
         clCheckError retCode $ peekCString p_void
+
+-- |The same as withArray but return nullPtr for empty lists
+withArrayOrNP :: Storable a => [a] -> (Ptr a -> IO b) -> IO b
+withArrayOrNP [] f = f nullPtr
+withArrayOrNP l f  = withArray l f
