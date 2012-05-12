@@ -5,6 +5,8 @@
 -- |
 --------------------------------------------------------------------------------
 
+#include <inc_opencl.h>
+
 module Foreign.OpenCL.V10.CommandQueue
        ( clCreateCommandQueue
        , clRetainCommandQueue
@@ -13,7 +15,11 @@ module Foreign.OpenCL.V10.CommandQueue
        , clGetCommandQueueDevice
        , clGetCommandQueueReferenceCount
        , clGetCommandQueueProperties
+
+#ifndef CL_VERSION_1_1
        , clSetCommandQueueProperty
+#endif
+
        , clEnqueueMarker
        , clEnqueueWaitForEvents
        , clEnqueueBarrier
@@ -54,6 +60,7 @@ clGetCommandQueueReferenceCount = clGetInfoIntegral Raw.clGetCommandQueueInfo Ra
 clGetCommandQueueProperties :: Raw.CL_command_queue -> IO [Raw.CLCommandQueueProperties]
 clGetCommandQueueProperties = clGetInfoBitfield Raw.clGetCommandQueueInfo Raw.CLQueueProperties
 
+#ifndef CL_VERSION_1_1
 clSetCommandQueueProperty :: Raw.CL_command_queue -> [Raw.CLCommandQueueProperties] -> Raw.CLBool -> IO [Raw.CLCommandQueueProperties]
 clSetCommandQueueProperty cq nps b =
     alloca $ \p_ops ->
@@ -61,6 +68,7 @@ clSetCommandQueueProperty cq nps b =
         retCode <- Raw.clSetCommandQueueProperty cq (combineBitMasks nps) (cFromEnum b) p_ops
         ops <- peek p_ops
         clCheckError retCode $ return $ extractBitMasks ops
+#endif
 
 clEnqueueMarker :: Raw.CL_command_queue -> IO Raw.CL_event
 clEnqueueMarker cq =

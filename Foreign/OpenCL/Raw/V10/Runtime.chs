@@ -7,12 +7,17 @@
 
 {-# LANGUAGE ForeignFunctionInterface #-}
 
+#include <inc_opencl.h>
+
 module Foreign.OpenCL.Raw.V10.Runtime
        ( clCreateCommandQueue
        , clRetainCommandQueue
        , clReleaseCommandQueue
        , clGetCommandQueueInfo
+
+#ifndef CL_VERSION_1_1
        , clSetCommandQueueProperty
+#endif
 
        , clCreateBuffer
        , clEnqueueReadBuffer
@@ -74,8 +79,6 @@ module Foreign.OpenCL.Raw.V10.Runtime
        )
        where
 
-#include <inc_opencl.h>
-
 import Foreign.OpenCL.Raw.C2HS
 import Foreign.OpenCL.Raw.V10.Types
 
@@ -108,6 +111,7 @@ import Foreign.OpenCL.Raw.V10.Types
   } -> `CL_int' cl_int
 #}
 
+#ifndef CL_VERSION_1_1
 {#fun unsafe clSetCommandQueueProperty as ^
   { cl_command_queue            `CL_command_queue'
   , cl_command_queue_properties `CL_command_queue_properties'
@@ -115,6 +119,7 @@ import Foreign.OpenCL.Raw.V10.Types
   , castPtr                     `Ptr CL_command_queue_properties'
   } -> `CL_int' cl_int
 #}
+#endif
 
 -- Memory Objects
 
