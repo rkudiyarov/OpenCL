@@ -35,6 +35,5 @@ Library
                         Foreign.OpenCL.V10.Event
 
   Build-tools:          c2hs >= 0.16.2
-  Build-depends:        base >=4,
-                        haskell98
+  Build-depends:        base >=4
   Include-dirs:         Foreign/OpenCL/Raw
