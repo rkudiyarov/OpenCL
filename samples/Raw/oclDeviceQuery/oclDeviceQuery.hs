@@ -1,6 +1,6 @@
 module Main where
 
-import Foreign.OpenCL.Raw.V10
+import Foreign.OpenCL.Raw
 import Foreign.OpenCL.Raw.C2HS
 
 buf :: Integral a => a

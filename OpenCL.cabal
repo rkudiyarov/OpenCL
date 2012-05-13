@@ -1,5 +1,5 @@
 Name:                   OpenCL
-Version:                0.0.6
+Version:                0.0.7
 Cabal-version:          >= 1.2
 License:                BSD3
 License-file:           LICENSE
@@ -12,27 +12,24 @@ Extra-source-files:     configure
                         configure.ac
 
 Library
-  Exposed-Modules:      Foreign.OpenCL.Raw.V10
-                        Foreign.OpenCL.Raw.V10.Types
-                        Foreign.OpenCL.Raw.V10.Enums
-                        Foreign.OpenCL.Raw.V10.Platform
-                        Foreign.OpenCL.Raw.V10.Device
-                        Foreign.OpenCL.Raw.V10.Context
-                        Foreign.OpenCL.Raw.V10.Runtime
+  Exposed-Modules:      Foreign.OpenCL.Raw
+                        Foreign.OpenCL.Raw.Types
+                        Foreign.OpenCL.Raw.Enums
+                        Foreign.OpenCL.Raw.Functions
                         Foreign.OpenCL.Raw.C2HS
 
-                        Foreign.OpenCL.V10
-                        Foreign.OpenCL.V10.Error
-                        Foreign.OpenCL.V10.Utils
-                        Foreign.OpenCL.V10.Platform
-                        Foreign.OpenCL.V10.Device
-                        Foreign.OpenCL.V10.Context
-                        Foreign.OpenCL.V10.CommandQueue
-                        Foreign.OpenCL.V10.Memory
-                        Foreign.OpenCL.V10.Sampler
-                        Foreign.OpenCL.V10.Program
-                        Foreign.OpenCL.V10.Kernel
-                        Foreign.OpenCL.V10.Event
+                        Foreign.OpenCL
+                        Foreign.OpenCL.Error
+                        Foreign.OpenCL.Utils
+                        Foreign.OpenCL.Platform
+                        Foreign.OpenCL.Device
+                        Foreign.OpenCL.Context
+                        Foreign.OpenCL.CommandQueue
+                        Foreign.OpenCL.Memory
+                        Foreign.OpenCL.Sampler
+                        Foreign.OpenCL.Program
+                        Foreign.OpenCL.Kernel
+                        Foreign.OpenCL.Event
 
   Build-tools:          c2hs >= 0.16.2
   Build-depends:        base >=4

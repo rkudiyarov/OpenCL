@@ -1,15 +1,15 @@
 --------------------------------------------------------------------------------
 -- |
--- Copyright : (c) [2010..2011] Vadim Zakondyrin
+-- Copyright : (c) [2012] Vadim Zakondyrin
 -- License   : BSD
 -- |
 --------------------------------------------------------------------------------
 
 {-# LANGUAGE ForeignFunctionInterface #-}
 
-module Foreign.OpenCL.Raw.V10.Types where
-
 #include <inc_opencl.h>
+
+module Foreign.OpenCL.Raw.Types where
 
 import Foreign
 import Foreign.C
@@ -132,22 +132,148 @@ cl_kernel_work_group_info a    = cl_uint a
 type CL_profiling_info = {# type cl_profiling_info #}
 cl_profiling_info a    = cl_uint a
 
+#ifdef CL_VERSION_1_1
+type CL_buffer_create_type = {# type cl_buffer_create_type #}
+cl_buffer_create_type a    = cl_uint a
+#endif
+
+#ifdef CL_VERSION_1_2
+type CL_device_partition_property = {# type cl_device_partition_property #}
+cl_device_partition_property a    = castPtr a
+
+type CL_device_affinity_domain = {# type cl_device_affinity_domain #}
+cl_device_affinity_domain a    = cl_bitfield a
+
+type CL_mem_migration_flags = {# type cl_mem_migration_flags #}
+cl_mem_migration_flags a    = cl_bitfield a
+
+type CL_program_binary_type = {# type cl_program_binary_type #}
+cl_program_binary_type a    = cl_uint a
+
+type CL_kernel_arg_info = {# type cl_kernel_arg_info #}
+cl_kernel_arg_info a    = cl_uint a
+
+type CL_kernel_arg_address_qualifier = {# type cl_kernel_arg_address_qualifier #}
+cl_kernel_arg_address_qualifier a    = cl_uint a
+
+type CL_kernel_arg_access_qualifier = {# type cl_kernel_arg_access_qualifier #}
+cl_kernel_arg_access_qualifier a    = cl_uint a
+
+type CL_kernel_arg_type_qualifier = {# type cl_kernel_arg_type_qualifier #}
+cl_kernel_arg_type_qualifier a    = cl_uint a
+#endif
+
 data CL_image_format =
-  CL_image_format { image_channel_order     :: CL_channel_order,
-                    image_channel_data_type :: CL_channel_type
+  CL_image_format { image_channel_order     :: CL_channel_order
+                  , image_channel_data_type :: CL_channel_type
                   }
 {# pointer *cl_image_format -> CL_image_format nocode #}
 
-getImageChannelOrder s = {#get cl_image_format->image_channel_order#} s
-                           >>= return . cl_channel_order
+getImageChannelOrder s = {# get cl_image_format->image_channel_order #}
+  s >>= return . cl_channel_order
 
-setImageChannelOrder s d = {#set cl_image_format->image_channel_order#}
-                             s
-                             (cl_channel_order d)
+setImageChannelOrder s d = {# set cl_image_format->image_channel_order #}
+  s (cl_channel_order d)
 
-getImageChannelDataType s = {#get cl_image_format->image_channel_data_type#} s
-                              >>= return . cl_channel_type
+getImageChannelDataType s = {# get cl_image_format->image_channel_data_type #}
+  s >>= return . cl_channel_type
 
-setImageChannelDataType s d = {#set cl_image_format->image_channel_data_type#}
-                                s
-                                (cl_channel_type d)
+setImageChannelDataType s d = {# set cl_image_format->image_channel_data_type #}
+  s (cl_channel_type d)
+
+#ifdef CL_VERSION_1_1
+data CL_buffer_region =
+  CL_buffer_region { origin :: CL_size
+                   , size   :: CL_size
+                   }
+{# pointer *cl_buffer_region -> CL_buffer_region nocode #}
+
+getOrigin s = {# get cl_buffer_region->origin #}
+  s >>= return . cl_size
+
+setOrigin s d = {# set cl_buffer_region->origin #}
+  s (cl_size d)
+
+getSize s = {# get cl_buffer_region->size #}
+  s >>= return . cl_size
+
+setSize s d = {# set cl_buffer_region->size #}
+  s (cl_size d)
+#endif
+
+#ifdef CL_VERSION_1_2
+data CL_image_desc =
+  CL_image_desc { image_type        :: CL_mem_object_type
+                , image_width       :: CL_size
+                , image_height      :: CL_size
+                , image_depth       :: CL_size
+                , image_array_size  :: CL_size
+                , image_row_pitch   :: CL_size
+                , image_slice_pitch :: CL_size
+		, num_mip_levels    :: CL_uint
+                , num_samples       :: CL_uint
+                , buffer            :: CL_mem
+                }
+{# pointer *cl_image_desc -> CL_image_desc nocode #}
+
+getImageType s = {# get cl_image_desc->image_type #}
+  s >>= return . cl_mem_object_type
+
+setImageType s d = {# set cl_image_desc->image_type #}
+  s (cl_mem_object_type d)
+
+getImageWidth s = {# get cl_image_desc->image_width #}
+  s >>= return . cl_size
+
+setImageWidth s d = {# set cl_image_desc->image_width #}
+  s (cl_size d)
+
+getImageHeight s = {# get cl_image_desc->image_height #}
+  s >>= return . cl_size
+
+setImageHeight s d = {# set cl_image_desc->image_height #}
+  s (cl_size d)
+
+getImageDepth s = {# get cl_image_desc->image_depth #}
+  s >>= return . cl_size
+
+setImageDepth s d = {# set cl_image_desc->image_depth #}
+  s (cl_size d)
+
+getImageArraySize s = {# get cl_image_desc->image_array_size #}
+  s >>= return . cl_size
+
+setImageArraySize s d = {# set cl_image_desc->image_array_size #}
+  s (cl_size d)
+
+getImageRowPitch s = {# get cl_image_desc->image_row_pitch #}
+  s >>= return . cl_size
+
+setImageRowPitch s d = {# set cl_image_desc->image_row_pitch #}
+  s (cl_size d)
+
+getImageSlicePitch s = {# get cl_image_desc->image_slice_pitch #}
+  s >>= return . cl_size
+
+setImageSlicePitch s d = {# set cl_image_desc->image_slice_pitch #}
+  s (cl_size d)
+
+getNumMipLevels s = {# get cl_image_desc->num_mip_levels #}
+  s >>= return . cl_uint
+
+setNumMipLevels s d = {# set cl_image_desc->num_mip_levels #}
+  s (cl_uint d)
+
+getNumSamples s = {# get cl_image_desc->num_samples #}
+  s >>= return . cl_uint
+
+setNumSamples s d = {# set cl_image_desc->num_samples #}
+  s (cl_uint d)
+
+getBuffer s = {# get cl_image_desc->buffer #}
+  s >>= return . cl_mem
+
+setBuffer s d = {# set cl_image_desc->buffer #}
+  s (cl_mem d)
+
+#endif

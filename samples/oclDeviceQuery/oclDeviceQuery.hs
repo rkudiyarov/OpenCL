@@ -1,7 +1,6 @@
 module Main where
 
-import Foreign.OpenCL.V10
---import qualified Foreign.OpenCL.Raw.V10.Enums as Raw
+import Foreign.OpenCL
 
 showDeviceInfo a = do
                    dv_name <- clGetDeviceName a

@@ -1,13 +1,13 @@
 --------------------------------------------------------------------------------
 -- |
--- Copyright : (c) [2011] Vadim Zakondyrin
+-- Copyright : (c) [2012] Vadim Zakondyrin
 -- License   : BSD
 -- |
 --------------------------------------------------------------------------------
 
 #include <inc_opencl.h>
 
-module Foreign.OpenCL.V10.CommandQueue
+module Foreign.OpenCL.CommandQueue
        ( clCreateCommandQueue
        , clRetainCommandQueue
        , clReleaseCommandQueue
@@ -20,19 +20,22 @@ module Foreign.OpenCL.V10.CommandQueue
        , clSetCommandQueueProperty
 #endif
 
+#ifndef CL_VERSION_1_2
        , clEnqueueMarker
        , clEnqueueWaitForEvents
        , clEnqueueBarrier
+#endif
+
        , clFlush
        , clFinish
        )
        where
 
-import qualified Foreign.OpenCL.Raw.V10 as Raw
+import qualified Foreign.OpenCL.Raw as Raw
 import Foreign.OpenCL.Raw.C2HS
 
-import Foreign.OpenCL.V10.Error
-import Foreign.OpenCL.V10.Utils
+import Foreign.OpenCL.Error
+import Foreign.OpenCL.Utils
 
 clCreateCommandQueue :: Raw.CL_context -> Raw.CL_device_id -> [Raw.CLCommandQueueProperties] -> IO Raw.CL_command_queue
 clCreateCommandQueue c d ps =
@@ -60,7 +63,16 @@ clGetCommandQueueReferenceCount = clGetInfoIntegral Raw.clGetCommandQueueInfo Ra
 clGetCommandQueueProperties :: Raw.CL_command_queue -> IO [Raw.CLCommandQueueProperties]
 clGetCommandQueueProperties = clGetInfoBitfield Raw.clGetCommandQueueInfo Raw.CLQueueProperties
 
+clFlush :: Raw.CL_command_queue -> IO ()
+clFlush = simpleFunction Raw.clFlush
+
+clFinish :: Raw.CL_command_queue -> IO ()
+clFinish = simpleFunction Raw.clFinish
+
+-- Deprecated
+
 #ifndef CL_VERSION_1_1
+
 clSetCommandQueueProperty :: Raw.CL_command_queue -> [Raw.CLCommandQueueProperties] -> Raw.CLBool -> IO [Raw.CLCommandQueueProperties]
 clSetCommandQueueProperty cq nps b =
     alloca $ \p_ops ->
@@ -68,7 +80,10 @@ clSetCommandQueueProperty cq nps b =
         retCode <- Raw.clSetCommandQueueProperty cq (combineBitMasks nps) (cFromEnum b) p_ops
         ops <- peek p_ops
         clCheckError retCode $ return $ extractBitMasks ops
+
 #endif
+
+#ifndef CL_VERSION_1_2
 
 clEnqueueMarker :: Raw.CL_command_queue -> IO Raw.CL_event
 clEnqueueMarker cq =
@@ -89,8 +104,4 @@ clEnqueueWaitForEvents cq evs =
 clEnqueueBarrier :: Raw.CL_command_queue -> IO ()
 clEnqueueBarrier = simpleFunction Raw.clEnqueueBarrier
 
-clFlush :: Raw.CL_command_queue -> IO ()
-clFlush = simpleFunction Raw.clFlush
-
-clFinish :: Raw.CL_command_queue -> IO ()
-clFinish = simpleFunction Raw.clFinish
+#endif

@@ -1,11 +1,11 @@
 --------------------------------------------------------------------------------
 -- |
--- Copyright : (c) [2011] Vadim Zakondyrin
+-- Copyright : (c) [2012] Vadim Zakondyrin
 -- License   : BSD
 -- |
 --------------------------------------------------------------------------------
 
-module Foreign.OpenCL.V10.Memory
+module Foreign.OpenCL.Memory
        ( clCreateBufferFromPtr
        , clCreateBufferFromList
        , clEnqueueReadBufferToPtr
@@ -45,11 +45,11 @@ module Foreign.OpenCL.V10.Memory
        )
        where
 
-import qualified Foreign.OpenCL.Raw.V10 as Raw
+import qualified Foreign.OpenCL.Raw as Raw
 import Foreign.OpenCL.Raw.C2HS
 
-import Foreign.OpenCL.V10.Error
-import Foreign.OpenCL.V10.Utils
+import Foreign.OpenCL.Error
+import Foreign.OpenCL.Utils
 
 clCreateBufferFromPtr :: (Integral i, Storable a) => Raw.CL_context -> [Raw.CLMemFlags] -> i -> Ptr a -> IO Raw.CL_mem
 clCreateBufferFromPtr c mf size host_ptr =
@@ -82,7 +82,7 @@ clEnqueueReadBufferToPtr cq m b offset cb ptr evs =
     alloca $ \p_ev ->
         do
         let n_evs = Raw.cl_uint $ length evs
-        p_evs <- case evs of 
+        p_evs <- case evs of
                  [] -> return(nullPtr)
                  otherwise -> newArray evs
         retCode <- Raw.clEnqueueReadBuffer cq m (cFromEnum b) (Raw.cl_size offset) (Raw.cl_size cb) ptr n_evs p_evs p_ev
@@ -115,7 +115,7 @@ clEnqueueWriteBufferFromPtr cq m b offset cb ptr evs =
     alloca $ \p_ev ->
         do
         let n_evs = Raw.cl_uint $ length evs
-        p_evs <- case evs of 
+        p_evs <- case evs of
                  [] -> return(nullPtr)
                  otherwise -> newArray evs
         retCode <- Raw.clEnqueueWriteBuffer cq m (cFromEnum b) (Raw.cl_size offset) (Raw.cl_size cb) ptr n_evs p_evs p_ev

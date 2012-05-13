@@ -1,11 +1,11 @@
 --------------------------------------------------------------------------------
 -- |
--- Copyright : (c) [2011] Vadim Zakondyrin
+-- Copyright : (c) [2012] Vadim Zakondyrin
 -- License   : BSD
 -- |
 --------------------------------------------------------------------------------
 
-module Foreign.OpenCL.V10.Kernel
+module Foreign.OpenCL.Kernel
        ( clCreateKernel
        , clCreateKernelsInProgram
        , clRetainKernel
@@ -25,11 +25,11 @@ module Foreign.OpenCL.V10.Kernel
        )
        where
 
-import qualified Foreign.OpenCL.Raw.V10 as Raw
+import qualified Foreign.OpenCL.Raw as Raw
 import Foreign.OpenCL.Raw.C2HS
 
-import Foreign.OpenCL.V10.Error
-import Foreign.OpenCL.V10.Utils
+import Foreign.OpenCL.Error
+import Foreign.OpenCL.Utils
 
 clCreateKernel :: Raw.CL_program -> String -> IO Raw.CL_kernel
 clCreateKernel p s =

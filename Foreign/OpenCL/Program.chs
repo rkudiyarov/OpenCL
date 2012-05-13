@@ -1,17 +1,23 @@
 --------------------------------------------------------------------------------
 -- |
--- Copyright : (c) [2011] Vadim Zakondyrin
+-- Copyright : (c) [2012] Vadim Zakondyrin
 -- License   : BSD
 -- |
 --------------------------------------------------------------------------------
 
-module Foreign.OpenCL.V10.Program
+#include <inc_opencl.h>
+
+module Foreign.OpenCL.Program
        ( clCreateProgramWithSource
        , clCreateProgramWithBinary
        , clRetainProgram
        , clReleaseProgram
        , clBuildProgram
+
+#ifndef CL_VERSION_1_2
        , clUnloadCompiler
+#endif
+
        , clGetProgramReferenceCount
        , clGetProgramContext
        , clGetProgramNumDevices
@@ -26,11 +32,11 @@ module Foreign.OpenCL.V10.Program
        )
        where
 
-import qualified Foreign.OpenCL.Raw.V10 as Raw
+import qualified Foreign.OpenCL.Raw as Raw
 import Foreign.OpenCL.Raw.C2HS
 
-import Foreign.OpenCL.V10.Error
-import Foreign.OpenCL.V10.Utils
+import Foreign.OpenCL.Error
+import Foreign.OpenCL.Utils
 
 clCreateProgramWithSource :: Raw.CL_context -> [String] -> IO Raw.CL_program
 clCreateProgramWithSource c ss =
@@ -81,12 +87,6 @@ clBuildProgram p dvs opt =
             retCode <- Raw.clBuildProgram p (Raw.cl_uint $ length dvs) p_dvs p_opt nullFunPtr nullPtr
             clCheckError retCode $ return ()
 
-clUnloadCompiler :: IO ()
-clUnloadCompiler =
-    do
-    retCode <- Raw.clUnloadCompiler
-    clCheckError retCode $ return ()
-
 clGetProgramReferenceCount :: (Integral i) => Raw.CL_program -> IO i
 clGetProgramReferenceCount = clGetInfoIntegral Raw.clGetProgramInfo Raw.CLProgramReferenceCount
 
@@ -129,3 +129,15 @@ clGetProgramBuildOptions = clGetInfoStringWDI Raw.clGetProgramBuildInfo Raw.CLPr
 
 clGetProgramBuildLog :: Raw.CL_program -> Raw.CL_device_id -> IO String
 clGetProgramBuildLog = clGetInfoStringWDI Raw.clGetProgramBuildInfo Raw.CLProgramBuildLog
+
+-- Deprecated
+
+#ifndef CL_VERSION_1_2
+
+clUnloadCompiler :: IO ()
+clUnloadCompiler =
+    do
+    retCode <- Raw.clUnloadCompiler
+    clCheckError retCode $ return ()
+
+#endif

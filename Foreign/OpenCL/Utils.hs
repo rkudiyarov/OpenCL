@@ -1,11 +1,11 @@
 --------------------------------------------------------------------------------
 -- |
--- Copyright : (c) [2011] Vadim Zakondyrin
+-- Copyright : (c) [2012] Vadim Zakondyrin
 -- License   : BSD
 -- |
 --------------------------------------------------------------------------------
 
-module Foreign.OpenCL.V10.Utils
+module Foreign.OpenCL.Utils
        ( simpleFunction
        , clRetain
        , clRelease
@@ -23,10 +23,10 @@ module Foreign.OpenCL.V10.Utils
        )
        where
 
-import qualified Foreign.OpenCL.Raw.V10 as Raw
+import qualified Foreign.OpenCL.Raw as Raw
 import Foreign.OpenCL.Raw.C2HS
 
-import Foreign.OpenCL.V10.Error
+import Foreign.OpenCL.Error
 
 simpleFunction :: (a -> IO Raw.CL_int) -> a -> IO ()
 simpleFunction f o =

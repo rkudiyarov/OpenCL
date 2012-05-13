@@ -1,11 +1,11 @@
 --------------------------------------------------------------------------------
 -- |
--- Copyright : (c) [2011] Vadim Zakondyrin
+-- Copyright : (c) [2012] Vadim Zakondyrin
 -- License   : BSD
 -- |
 --------------------------------------------------------------------------------
 
-module Foreign.OpenCL.V10.Platform
+module Foreign.OpenCL.Platform
        ( clGetPlatformCount
        , clGetPlatformIDs
        , clGetPlatformProfile
@@ -16,11 +16,11 @@ module Foreign.OpenCL.V10.Platform
        )
        where
 
-import qualified Foreign.OpenCL.Raw.V10 as Raw
+import qualified Foreign.OpenCL.Raw as Raw
 import Foreign.OpenCL.Raw.C2HS
 
-import Foreign.OpenCL.V10.Error
-import Foreign.OpenCL.V10.Utils
+import Foreign.OpenCL.Error
+import Foreign.OpenCL.Utils
 
 clGetPlatformCount :: IO Int
 clGetPlatformCount =

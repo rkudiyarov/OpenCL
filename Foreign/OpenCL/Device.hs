@@ -1,11 +1,11 @@
 --------------------------------------------------------------------------------
 -- |
--- Copyright : (c) [2011] Vadim Zakondyrin
+-- Copyright : (c) [2012] Vadim Zakondyrin
 -- License   : BSD
 -- |
 --------------------------------------------------------------------------------
 
-module Foreign.OpenCL.V10.Device
+module Foreign.OpenCL.Device
        ( clGetDeviceCount
        , clGetDeviceIDs
        , clGetDeviceType
@@ -61,11 +61,11 @@ module Foreign.OpenCL.V10.Device
        )
        where
 
-import qualified Foreign.OpenCL.Raw.V10 as Raw
+import qualified Foreign.OpenCL.Raw as Raw
 import Foreign.OpenCL.Raw.C2HS
 
-import Foreign.OpenCL.V10.Error
-import Foreign.OpenCL.V10.Utils
+import Foreign.OpenCL.Error
+import Foreign.OpenCL.Utils
 
 clGetDeviceCount :: Raw.CL_platform_id -> [Raw.CLDeviceType] -> IO Int
 clGetDeviceCount platform device_type =

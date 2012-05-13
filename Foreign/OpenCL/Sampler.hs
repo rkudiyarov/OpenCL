@@ -1,11 +1,11 @@
 --------------------------------------------------------------------------------
 -- |
--- Copyright : (c) [2011] Vadim Zakondyrin
+-- Copyright : (c) [2012] Vadim Zakondyrin
 -- License   : BSD
 -- |
 --------------------------------------------------------------------------------
 
-module Foreign.OpenCL.V10.Sampler
+module Foreign.OpenCL.Sampler
        ( clCreateSampler
        , clRetainSampler
        , clReleaseSampler
@@ -17,11 +17,11 @@ module Foreign.OpenCL.V10.Sampler
        )
        where
 
-import qualified Foreign.OpenCL.Raw.V10 as Raw
+import qualified Foreign.OpenCL.Raw as Raw
 import Foreign.OpenCL.Raw.C2HS
 
-import Foreign.OpenCL.V10.Error
-import Foreign.OpenCL.V10.Utils
+import Foreign.OpenCL.Error
+import Foreign.OpenCL.Utils
 
 clCreateSampler :: Raw.CL_context -> Raw.CLBool -> Raw.CLAddressingMode -> Raw.CLFilterMode -> IO Raw.CL_sampler
 clCreateSampler c b am fm =

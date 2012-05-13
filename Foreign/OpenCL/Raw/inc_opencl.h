@@ -8,7 +8,7 @@ extern "C" {
 #ifdef __APPLE__
 
 #undef __BLOCKS__
-#include <OpenCL/OpenCL.h>
+#include <OpenCL/opencl.h>
 
 #else
 

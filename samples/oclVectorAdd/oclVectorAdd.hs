@@ -1,6 +1,6 @@
 module Main where
 
-import Foreign.OpenCL.V10
+import Foreign.OpenCL
 import Foreign.Storable
 import Foreign.Marshal
 import Foreign.Ptr
