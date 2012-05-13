@@ -7,7 +7,7 @@ main :: IO ()
 main = do
        pls <- clGetPlatformIDs
        let pl = head pls
-       dvs <- clGetDeviceIDs pl [CLDeviceTypeAll]
+       dvs <- clGetDeviceIDs pl [CLDeviceTypeGPU]
        c <- clCreateContext [ContextPlatform pl] dvs
        let buf = [3.5, 11.5, 32.2, 34.7, 15.1] :: [CDouble]
        m <- clCreateBufferFromList c [CLMemReadWrite, CLMemCopyHostPtr] buf

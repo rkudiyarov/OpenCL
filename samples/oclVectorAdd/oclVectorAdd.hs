@@ -24,7 +24,7 @@ main =
                  do
                  pls <- clGetPlatformIDs
                  let pl = head pls
-                 dvs <- clGetDeviceIDs pl [CLDeviceTypeAll]
+                 dvs <- clGetDeviceIDs pl [CLDeviceTypeGPU]
                  let dv = head dvs
                  ctx <- clCreateContext [] dvs --fix for osx
                  --ctx <- clCreateContext [ContextPlatform $ head pls] dvs
