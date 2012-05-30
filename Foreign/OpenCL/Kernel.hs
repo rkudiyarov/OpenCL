@@ -98,12 +98,6 @@ clGetKernelCompileWorkGroupSize k d =
 clGetKernelLocalMemSize :: (Integral i) => Raw.CL_kernel -> Raw.CL_device_id -> IO i
 clGetKernelLocalMemSize = clGetInfoIntegralWDI Raw.clGetKernelWorkGroupInfo Raw.CLKernelLocalMemSize
 
---
--- global work offset should be nullPtr in opencl 1.0,
--- but not local work size
--- FIXME: [] => nullPtr
---
-
 clEnqueueNDRangeKernel :: Raw.CL_command_queue -> Raw.CL_kernel -> [Raw.CL_size] -> [Raw.CL_size] -> [Raw.CL_size] -> [Raw.CL_event] -> IO Raw.CL_event
 clEnqueueNDRangeKernel cq k gwo gws lws evs =
     withArrayOrNP gwo $ \p_gwo ->
@@ -113,7 +107,7 @@ clEnqueueNDRangeKernel cq k gwo gws lws evs =
                     alloca $ \p_e ->
                         do
                         let wd = max (length lws) $ max (length gwo) (length gws)
-                        retCode <- Raw.clEnqueueNDRangeKernel cq k (Raw.cl_size wd) nullPtr{-p_gwo-} p_gws nullPtr{-p_lws-} (Raw.cl_uint $ length evs) p_evs p_e
+                        retCode <- Raw.clEnqueueNDRangeKernel cq k (Raw.cl_size wd) p_gwo p_gws p_lws (Raw.cl_uint $ length evs) p_evs p_e
                         clCheckError retCode $ peek p_e
 
 clEnqueueTask :: Raw.CL_command_queue -> Raw.CL_kernel -> [Raw.CL_event] -> IO Raw.CL_event
